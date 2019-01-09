@@ -1,14 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.IO;
 
-namespace MatheMage_REDUX
+namespace MatheMage
 {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Dungeon1 : Game
+    public class Game : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -21,6 +20,7 @@ namespace MatheMage_REDUX
         Texture2D City;
         Texture2D FireBall;
         Texture2D Map;
+        Texture2D Ghost;
         SpriteFont PixelCry;
 
         Vector2 taskPos0 = new Vector2(135 * 3, 165 * 3);
@@ -34,8 +34,9 @@ namespace MatheMage_REDUX
 
         string[] MathTasks = new string[6];
 
+        int EnemyType = 1;
         int Health = 3;
-        int EnemyHealth = 10;
+        int EnemyHealth = 1;
 
         int Wait = 0;
         int FrameCount = 1;
@@ -45,10 +46,11 @@ namespace MatheMage_REDUX
         string level = "city";
         bool isAnswered = false;
 
+        bool isEnemyAlive = false;
         bool isLevelStart = false;
         bool isAnswerCorrect = true;
 
-        public Dungeon1()
+        public Game()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -96,6 +98,7 @@ namespace MatheMage_REDUX
             City = this.Content.Load<Texture2D>("city");
             FireBall = this.Content.Load<Texture2D>("fireball");
             Map = this.Content.Load<Texture2D>("map");
+            Ghost = this.Content.Load<Texture2D>("Ghost");
         }
 
         /// <summary>
@@ -137,6 +140,18 @@ namespace MatheMage_REDUX
             else
             if (level == "dungeon")
             {
+                if (!isEnemyAlive)
+                {
+                    EnemyType = Randomize.Rnd(1, 3);
+                    if (EnemyType == 1)
+                    {
+                        EnemyHealth = 10;
+                    }else if (EnemyType == 2)
+                    {
+                        EnemyHealth = 5;
+                    }
+                    isEnemyAlive = true;
+                }
                 if (!isAnswered)
                 {
                     if (Wait == 30)
@@ -157,7 +172,7 @@ namespace MatheMage_REDUX
                         isAnswerCorrect = true;
                         if (EnemyHealth == 0)
                         {
-                            Exit();
+                            isEnemyAlive = false;
                         }
                     }
                     else
@@ -169,7 +184,7 @@ namespace MatheMage_REDUX
                         isAnswerCorrect = true;
                         if (EnemyHealth == 0)
                         {
-                            Exit();
+                            isEnemyAlive = false;
                         }
                     }
                     else
@@ -181,7 +196,7 @@ namespace MatheMage_REDUX
                         isAnswerCorrect = true;
                         if (EnemyHealth == 0)
                         {
-                            Exit();
+                            isEnemyAlive = false;
                         }
                     }
                     else
@@ -193,7 +208,7 @@ namespace MatheMage_REDUX
                         isAnswerCorrect = true;
                         if (EnemyHealth == 0)
                         {
-                            Exit();
+                            isEnemyAlive = false;
                         }
                     }
                     else
@@ -257,7 +272,13 @@ namespace MatheMage_REDUX
                 }else
                     spriteBatch.Draw(Hero2, destinationRectangle: new Rectangle(20 * 3, 70 * 3, 64 * 3, 64 * 3));
 
-                spriteBatch.Draw(Sobaka, destinationRectangle: new Rectangle(220 * 3, 70 * 3, 80 * 2, 80 * 2));
+                if (EnemyType == 1)
+                {
+                    spriteBatch.Draw(Sobaka, destinationRectangle: new Rectangle(220 * 3, 70 * 3, 80 * 2, 80 * 2));
+                }else if (EnemyType == 2)
+                {
+                    spriteBatch.Draw(Ghost, destinationRectangle: new Rectangle(220 * 3, 70 * 3, 32 * 5, 32 * 5));
+                }
                 //spriteBatch.DrawString(PixelCry, screenWidth.ToString(), Vector2.Zero, Color.Red);
 
                 if (!isAnswered && isLevelStart && isAnswerCorrect)

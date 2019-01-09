@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MatheMage_REDUX
+namespace MatheMage
 {
 #if WINDOWS || LINUX
     /// <summary>
@@ -14,7 +14,7 @@ namespace MatheMage_REDUX
         [STAThread]
         static void Main()
         {
-            using (var game = new Dungeon1())
+            using (var game = new Game())
                 game.Run();
         }
     }
