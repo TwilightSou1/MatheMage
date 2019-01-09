@@ -80,6 +80,7 @@
     <Content Include="Content\Hero1.png" />
     <Content Include="Content\fireball.png" />
     <Content Include="Content\Hero2.png" />
+    <Content Include="Content\lich-technical_941_use_only_when_nesessary.mp3" />
     <Content Include="Content\map.png" />
     <Content Include="Content\Sobaka.png" />
     <Content Include="Icon.ico">

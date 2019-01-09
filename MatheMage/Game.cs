@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace MatheMage
 {
@@ -11,6 +12,8 @@ namespace MatheMage
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        Song MainTheme;
 
         Texture2D DungeonBackground;
         Texture2D Hero1;
@@ -75,7 +78,7 @@ namespace MatheMage
             //screenWidth = this.graphics.PreferredBackBufferWidth / 320;
 
             this.IsMouseVisible = true;
-
+            
             base.Initialize();
         }
 
@@ -88,6 +91,8 @@ namespace MatheMage
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            MainTheme = this.Content.Load<Song>("lich-technical_941_use_only_when_nesessary");
+
             // TODO: use this.Content to load your game content here
             DungeonBackground = this.Content.Load<Texture2D>("BackGround");
             ChooseMenu = this.Content.Load<Texture2D>("ChooseMenu");
@@ -99,6 +104,15 @@ namespace MatheMage
             FireBall = this.Content.Load<Texture2D>("fireball");
             Map = this.Content.Load<Texture2D>("map");
             Ghost = this.Content.Load<Texture2D>("Ghost");
+            
+            MediaPlayer.Play(MainTheme);
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
+        }
+
+        void MediaPlayer_MediaStateChanged(object sender, System.EventArgs e)
+        {
+            MediaPlayer.Volume = 0.5f;
         }
 
         /// <summary>

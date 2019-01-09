@@ -97,6 +97,12 @@
 /processorParam:TextureFormat=Color
 /build:Hero2.png
 
+#begin lich-technical_941_use_only_when_nesessary.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:lich-technical_941_use_only_when_nesessary.mp3
+
 #begin map.png
 /importer:TextureImporter
 /processor:TextureProcessor
