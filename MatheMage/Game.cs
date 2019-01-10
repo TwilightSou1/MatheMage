@@ -44,6 +44,8 @@ namespace MatheMage
         int Health = 3;
         int EnemyHealth = 1;
         int HeroDamage = 1;
+        int Gold = 0;
+        int KilledEnemies = 0;
 
         int Wait = 0;
         int FrameCount = 1;
@@ -176,7 +178,7 @@ namespace MatheMage
                     Wait = 0;
                 }
                 else if (ChangeReady == true) Wait++;
-                else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 158 * 3 && currentMouseState.Position.X < 272 * 3 && currentMouseState.Position.Y > 120 * 3 && currentMouseState.Position.Y < 161 * 3)
+                else if (Gold >= 10 && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 158 * 3 && currentMouseState.Position.X < 272 * 3 && currentMouseState.Position.Y > 120 * 3 && currentMouseState.Position.Y < 161 * 3)
                 {
                     UpgradeChangeReady = true;
                 }
@@ -186,6 +188,7 @@ namespace MatheMage
                     HeroDamage++;
                     UpgradeChangeReady = false;
                     Wait = 0;
+                    Gold -= 10;
                 }
                 else if (UpgradeChangeReady == true) Wait++;
             }
@@ -231,6 +234,19 @@ namespace MatheMage
                         isAnswerCorrect = true;
                         if (EnemyHealth <= 0)
                         {
+                            if (EnemyType == 1)
+                            {
+                                Gold += 5;
+                            }else if (EnemyType == 2)
+                            {
+                                Gold += 10;
+                            }
+                            KilledEnemies++;
+                            if (KilledEnemies == 2)
+                            {
+                                KilledEnemies = 0;
+                                level = "city";
+                            }
                             isEnemyAlive = false;
                         }
                     }
@@ -243,6 +259,20 @@ namespace MatheMage
                         isAnswerCorrect = true;
                         if (EnemyHealth <= 0)
                         {
+                            if (EnemyType == 1)
+                            {
+                                Gold += 5;
+                            }
+                            else if (EnemyType == 2)
+                            {
+                                Gold += 10;
+                            }
+                            KilledEnemies++;
+                            if (KilledEnemies == 2)
+                            {
+                                KilledEnemies = 0;
+                                level = "city";
+                            }
                             isEnemyAlive = false;
                         }
                     }
@@ -255,6 +285,20 @@ namespace MatheMage
                         isAnswerCorrect = true;
                         if (EnemyHealth <= 0)
                         {
+                            if (EnemyType == 1)
+                            {
+                                Gold += 5;
+                            }
+                            else if (EnemyType == 2)
+                            {
+                                Gold += 10;
+                            }
+                            KilledEnemies++;
+                            if (KilledEnemies == 2)
+                            {
+                                KilledEnemies = 0;
+                                level = "city";
+                            }
                             isEnemyAlive = false;
                         }
                     }
@@ -267,6 +311,20 @@ namespace MatheMage
                         isAnswerCorrect = true;
                         if (EnemyHealth <= 0)
                         {
+                            if (EnemyType == 1)
+                            {
+                                Gold += 5;
+                            }
+                            else if (EnemyType == 2)
+                            {
+                                Gold += 10;
+                            }
+                            KilledEnemies++;
+                            if (KilledEnemies == 2)
+                            {
+                                KilledEnemies = 0;
+                                level = "city";
+                            }
                             isEnemyAlive = false;
                         }
                     }
@@ -305,6 +363,7 @@ namespace MatheMage
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
 
                 spriteBatch.Draw(City, destinationRectangle: new Rectangle(0, 0, 320 * 3, 150 * 3));
+                spriteBatch.DrawString(PixelCry, Gold.ToString(), HealthPos, Color.Yellow);
 
                 spriteBatch.End();
             }
