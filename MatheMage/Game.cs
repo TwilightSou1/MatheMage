@@ -21,6 +21,7 @@ namespace MatheMage
         Texture2D Sobaka;
         Texture2D ChooseMenu;
         Texture2D City;
+        Texture2D Forge;
         Texture2D FireBall;
         Texture2D Map;
         Texture2D Ghost;
@@ -35,11 +36,14 @@ namespace MatheMage
         Vector2 EnemyHealthPos = new Vector2(300 * 3, 0);
         Vector2 HealthPos = new Vector2(30, 0);
 
+        Vector2 HeroDmagePos = new Vector2(275 * 3, 120 * 3);
+
         string[] MathTasks = new string[6];
 
         int EnemyType = 1;
         int Health = 3;
         int EnemyHealth = 1;
+        int HeroDamage = 1;
 
         int Wait = 0;
         int FrameCount = 1;
@@ -48,6 +52,9 @@ namespace MatheMage
 
         string level = "city";
         bool isAnswered = false;
+
+        bool ChangeReady = false;
+        bool UpgradeChangeReady = false;
 
         bool isEnemyAlive = false;
         bool isLevelStart = false;
@@ -104,6 +111,7 @@ namespace MatheMage
             FireBall = this.Content.Load<Texture2D>("fireball");
             Map = this.Content.Load<Texture2D>("map");
             Ghost = this.Content.Load<Texture2D>("Ghost");
+            Forge = this.Content.Load < Texture2D>("Forge");
             
             MediaPlayer.Play(MainTheme);
             MediaPlayer.IsRepeating = true;
@@ -112,7 +120,7 @@ namespace MatheMage
 
         void MediaPlayer_MediaStateChanged(object sender, System.EventArgs e)
         {
-            MediaPlayer.Volume = 0.5f;
+            MediaPlayer.Volume = 1f;
         }
 
         /// <summary>
@@ -142,7 +150,44 @@ namespace MatheMage
                 if(currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 265 * 3 && currentMouseState.Position.X < 320 * 3 && currentMouseState.Position.Y > 80 * 3 && currentMouseState.Position.Y < 115 * 3)
                 {
                     level = "map";
+                }else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 185 * 3 && currentMouseState.Position.X < 252 * 3 && currentMouseState.Position.Y > 40 * 3 && currentMouseState.Position.Y < 96 * 3)
+                {
+                    ChangeReady = true;
+                }else
+                if (ChangeReady == true && Wait == 15)
+                {
+                    level = "forge";
+                    ChangeReady = false;
+                    Wait = 0;
                 }
+                else if (ChangeReady == true) Wait++;
+                
+            }else if(level == "forge")
+            {
+                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 18 && currentMouseState.Position.X < 86 * 3 && currentMouseState.Position.Y > 8 * 3 && currentMouseState.Position.Y < 40 * 3)
+                {
+                    ChangeReady = true;
+                }
+                else
+                if (ChangeReady == true && Wait == 15)
+                {
+                    level = "city";
+                    ChangeReady = false;
+                    Wait = 0;
+                }
+                else if (ChangeReady == true) Wait++;
+                else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 158 * 3 && currentMouseState.Position.X < 272 * 3 && currentMouseState.Position.Y > 120 * 3 && currentMouseState.Position.Y < 161 * 3)
+                {
+                    UpgradeChangeReady = true;
+                }
+                else
+                if (UpgradeChangeReady == true && Wait == 15)
+                {
+                    HeroDamage++;
+                    UpgradeChangeReady = false;
+                    Wait = 0;
+                }
+                else if (UpgradeChangeReady == true) Wait++;
             }
             else if(level == "map")
             {
@@ -179,24 +224,24 @@ namespace MatheMage
                 }
                 if (isAnswered)
                 {
-                    if (MathTasks[5] == "3" && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 200 * 3 && currentMouseState.Position.X < 310 * 3 && currentMouseState.Position.Y > 192 * 3 && currentMouseState.Position.Y < 208 * 3)  //ВП
+                    if (MathTasks[5] == "4" && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 200 * 3 && currentMouseState.Position.X < 310 * 3 && currentMouseState.Position.Y > 215 * 3 && currentMouseState.Position.Y < 235 * 3)  //НП
                     {
                         isAnswered = false;
-                        EnemyHealth--;
+                        EnemyHealth -= HeroDamage;
                         isAnswerCorrect = true;
-                        if (EnemyHealth == 0)
+                        if (EnemyHealth <= 0)
                         {
                             isEnemyAlive = false;
                         }
                     }
                     else
 
-                    if (MathTasks[5] == "4" && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 200 * 3 && currentMouseState.Position.X < 310 * 3 && currentMouseState.Position.Y > 215 * 3 && currentMouseState.Position.Y < 235 * 3)  //НП
+                    if (MathTasks[5] == "3" && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 200 * 3 && currentMouseState.Position.X < 310 * 3 && currentMouseState.Position.Y > 192 * 3 && currentMouseState.Position.Y < 208 * 3)  //ВП
                     {
                         isAnswered = false;
-                        EnemyHealth--;
+                        EnemyHealth -= HeroDamage;
                         isAnswerCorrect = true;
-                        if (EnemyHealth == 0)
+                        if (EnemyHealth <= 0)
                         {
                             isEnemyAlive = false;
                         }
@@ -206,9 +251,9 @@ namespace MatheMage
                     if (MathTasks[5] == "2" && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 20 * 3 && currentMouseState.Position.X < 130 * 3 && currentMouseState.Position.Y > 215 * 3 && currentMouseState.Position.Y < 235 * 3)  //НЛ
                     {
                         isAnswered = false;
-                        EnemyHealth--;
+                        EnemyHealth -= HeroDamage;
                         isAnswerCorrect = true;
-                        if (EnemyHealth == 0)
+                        if (EnemyHealth <= 0)
                         {
                             isEnemyAlive = false;
                         }
@@ -218,9 +263,9 @@ namespace MatheMage
                     if (MathTasks[5] == "1" && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 20 * 3 && currentMouseState.Position.X < 130 * 3 && currentMouseState.Position.Y > 192 * 3 && currentMouseState.Position.Y < 208 * 3)  //ВЛ
                     {
                         isAnswered = false;
-                        EnemyHealth--;
+                        EnemyHealth -= HeroDamage;
                         isAnswerCorrect = true;
-                        if (EnemyHealth == 0)
+                        if (EnemyHealth <= 0)
                         {
                             isEnemyAlive = false;
                         }
@@ -272,6 +317,15 @@ namespace MatheMage
 
                 spriteBatch.End();
             }else
+            if (level == "forge")
+            {
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
+
+                spriteBatch.Draw(Forge, destinationRectangle: new Rectangle(0, 0, 320 * 3, 240 * 3));
+                spriteBatch.DrawString(PixelCry, HeroDamage.ToString(), HeroDmagePos, Color.White);
+
+                spriteBatch.End();
+            }
             if (level == "dungeon")
             {
                 // TODO: Add your drawing code here
