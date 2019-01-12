@@ -76,6 +76,7 @@
     <Content Include="Content\BackGround.png" />
     <Content Include="Content\ChooseMenu.png" />
     <Content Include="Content\City.png" />
+    <Content Include="Content\ForestBackGround.png" />
     <Content Include="Content\Forge.png" />
     <Content Include="Content\Ghost.png" />
     <Content Include="Content\Hero1.png" />

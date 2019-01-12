@@ -16,6 +16,7 @@ namespace MatheMage
         Song MainTheme;
 
         Texture2D DungeonBackground;
+        Texture2D ForestBackGround;
         Texture2D Hero1;
         Texture2D Hero2;
         Texture2D Sobaka;
@@ -104,6 +105,7 @@ namespace MatheMage
 
             // TODO: use this.Content to load your game content here
             DungeonBackground = this.Content.Load<Texture2D>("BackGround");
+            ForestBackGround = this.Content.Load<Texture2D>("ForestBackGround");
             ChooseMenu = this.Content.Load<Texture2D>("ChooseMenu");
             Hero1 = this.Content.Load<Texture2D>("Hero1");
             Hero2 = this.Content.Load<Texture2D>("Hero2");
@@ -142,6 +144,7 @@ namespace MatheMage
         protected override void Update(GameTime gameTime)
         {
             MouseState currentMouseState = Mouse.GetState();
+            //Отсчёт кадров для анимаций
             if (FrameCount <= 60)
             {
                 FrameCount++;
@@ -198,10 +201,15 @@ namespace MatheMage
                 {
                     level = "dungeon";
                 }
+                else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 197 * 3 && currentMouseState.Position.X < 210 * 3 && currentMouseState.Position.Y > 100 * 3 && currentMouseState.Position.Y < 113 * 3)
+                {
+                    level = "forest";
+                }
             }
             else
             if (level == "dungeon")
             {
+                //Создание нового противника
                 if (!isEnemyAlive)
                 {
                     EnemyType = Randomize.Rnd(1, 3);
@@ -214,6 +222,7 @@ namespace MatheMage
                     }
                     isEnemyAlive = true;
                 }
+                //Ожидание после ответа(Нужно для адекватных анимаций)
                 if (!isAnswered)
                 {
                     if (Wait == 30)
@@ -225,6 +234,7 @@ namespace MatheMage
                     }
                     else Wait++;
                 }
+                //Проверка ответа на правильность, если прошло 0,5 секунд после последнего ответа
                 if (isAnswered)
                 {
                     if (MathTasks[5] == "4" && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 200 * 3 && currentMouseState.Position.X < 310 * 3 && currentMouseState.Position.Y > 215 * 3 && currentMouseState.Position.Y < 235 * 3)  //НП
@@ -384,15 +394,15 @@ namespace MatheMage
                 spriteBatch.DrawString(PixelCry, HeroDamage.ToString(), HeroDmagePos, Color.White);
 
                 spriteBatch.End();
-            }
+            }else
             if (level == "dungeon")
             {
-                // TODO: Add your drawing code here
 
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
 
                 spriteBatch.Draw(DungeonBackground, destinationRectangle: new Rectangle(0, 0, 320 * 3, 150 * 3));
                 spriteBatch.Draw(ChooseMenu, destinationRectangle: new Rectangle(0, 150 * 3, 320 * 3, 90 * 3));
+                //Анимация рав 0,5 секунды
                 if (FrameCount <= 30)
                 {
                     spriteBatch.Draw(Hero1, destinationRectangle: new Rectangle(20 * 3, 70 * 3, 64 * 3, 64 * 3));
@@ -401,7 +411,7 @@ namespace MatheMage
 
                 if (EnemyType == 1)
                 {
-                    spriteBatch.Draw(Sobaka, destinationRectangle: new Rectangle(220 * 3, 70 * 3, 80 * 2, 80 * 2));
+                    spriteBatch.Draw(Sobaka, destinationRectangle: new Rectangle(220 * 3, 75 * 3, 100 * 2, 100 * 2));
                 }else if (EnemyType == 2)
                 {
                     spriteBatch.Draw(Ghost, destinationRectangle: new Rectangle(220 * 3, 70 * 3, 32 * 5, 32 * 5));
@@ -416,7 +426,7 @@ namespace MatheMage
                 else
                     FireBallXPos = 10 * 3;
 
-
+                //Отрисовка заданий
                 if (isAnswered == true)
                 {
                     spriteBatch.DrawString(PixelCry, MathTasks[0], taskPos0, Color.White);
@@ -426,9 +436,16 @@ namespace MatheMage
                     spriteBatch.DrawString(PixelCry, MathTasks[4], taskPos4, Color.White); //НП 4
                                                                                            //=======
                 }
-
+                //Отрисовка хп
                 spriteBatch.DrawString(PixelCry, EnemyHealth.ToString(), EnemyHealthPos, Color.Red);
                 spriteBatch.DrawString(PixelCry, Health.ToString(), HealthPos, Color.Red);
+
+                spriteBatch.End();
+            }else if(level == "forest")
+            {
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
+
+                spriteBatch.Draw(ForestBackGround, destinationRectangle: new Rectangle(0, 0, 320*3, 150*3));
 
                 spriteBatch.End();
             }

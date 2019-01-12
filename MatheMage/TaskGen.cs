@@ -8,6 +8,7 @@ namespace MatheMage
 {
     class TaskGen
     {
+        //Генерация заданий
         public static string[] Generate(int diff)
         {
             Random rnd = new Random();

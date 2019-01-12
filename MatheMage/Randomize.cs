@@ -8,6 +8,7 @@ namespace MatheMage
 {
     class Randomize
     {
+        //Случайное число
         public static int Rnd(int min, int max)
         {
             Random rnd = new Random();
