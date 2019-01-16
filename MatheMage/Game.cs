@@ -17,6 +17,7 @@ namespace MatheMage
 
         Texture2D DungeonBackground;
         Texture2D ForestBackGround;
+        Texture2D WhileBackground;
         Texture2D Hero1;
         Texture2D Hero2;
         Texture2D Sobaka;
@@ -48,6 +49,10 @@ namespace MatheMage
         int Gold = 0;
         int KilledEnemies = 0;
 
+        int BackGroundX1 = 0 *3;
+        int BackGroundX2 = 320 * 3;
+
+        int WaitAfterKill = 560;
         int Wait = 0;
         int FrameCount = 1;
 
@@ -56,6 +61,7 @@ namespace MatheMage
         string level = "city";
         bool isAnswered = false;
 
+        bool LastEnemy = false;
         bool ChangeReady = false;
         bool UpgradeChangeReady = false;
 
@@ -105,6 +111,7 @@ namespace MatheMage
 
             // TODO: use this.Content to load your game content here
             DungeonBackground = this.Content.Load<Texture2D>("BackGround");
+            WhileBackground = this.Content.Load<Texture2D>("WhileBackground");
             ForestBackGround = this.Content.Load<Texture2D>("ForestBackGround");
             ChooseMenu = this.Content.Load<Texture2D>("ChooseMenu");
             Hero1 = this.Content.Load<Texture2D>("Hero1");
@@ -150,6 +157,7 @@ namespace MatheMage
                 FrameCount++;
             }
             else FrameCount = 1;
+            
             if (level == "city")
             {
                 if(currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 265 * 3 && currentMouseState.Position.X < 320 * 3 && currentMouseState.Position.Y > 80 * 3 && currentMouseState.Position.Y < 115 * 3)
@@ -209,18 +217,32 @@ namespace MatheMage
             else
             if (level == "dungeon")
             {
+
+                if (!LastEnemy && !isEnemyAlive)
+                {
+                    BackGroundX1 -= 10;
+                    BackGroundX2 -= 10;
+                }
+
                 //Создание нового противника
                 if (!isEnemyAlive)
                 {
-                    EnemyType = Randomize.Rnd(1, 3);
-                    if (EnemyType == 1)
+                    if (WaitAfterKill <= 0)
                     {
-                        EnemyHealth = 10;
-                    }else if (EnemyType == 2)
-                    {
-                        EnemyHealth = 5;
+                        EnemyType = Randomize.Rnd(1, 3);
+                        if (EnemyType == 1)
+                        {
+                            EnemyHealth = 1;
+                        }
+                        else if (EnemyType == 2)
+                        {
+                            EnemyHealth = 1;
+                        }
+                        isEnemyAlive = true;
+                        WaitAfterKill = 560;
+
                     }
-                    isEnemyAlive = true;
+                    else WaitAfterKill--;
                 }
                 //Ожидание после ответа(Нужно для адекватных анимаций)
                 if (!isAnswered)
@@ -399,10 +421,19 @@ namespace MatheMage
             {
 
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
+                if (LastEnemy == true)
+                {
+                    spriteBatch.Draw(DungeonBackground, destinationRectangle: new Rectangle(0, 0, 320 * 3, 150 * 3));
 
-                spriteBatch.Draw(DungeonBackground, destinationRectangle: new Rectangle(0, 0, 320 * 3, 150 * 3));
+                }
+                else
+                {
+                    spriteBatch.Draw(WhileBackground, destinationRectangle: new Rectangle(BackGroundX1, 0, 320 * 3, 150 * 3));
+                    spriteBatch.Draw(WhileBackground, destinationRectangle: new Rectangle(BackGroundX2, 0, 320 * 3, 150 * 3));
+                    
+                }
                 spriteBatch.Draw(ChooseMenu, destinationRectangle: new Rectangle(0, 150 * 3, 320 * 3, 90 * 3));
-                //Анимация рав 0,5 секунды
+                //Анимация раз в 0,5 секунды
                 if (FrameCount <= 30)
                 {
                     spriteBatch.Draw(Hero1, destinationRectangle: new Rectangle(20 * 3, 70 * 3, 64 * 3, 64 * 3));
