@@ -52,7 +52,7 @@ namespace MatheMage
         int BackGroundX1 = 0 *3;
         int BackGroundX2 = 320 * 3;
 
-        int WaitAfterKill = 560;
+        int WaitAfterKill = 60;
         int Wait = 0;
         int FrameCount = 1;
 
@@ -67,6 +67,7 @@ namespace MatheMage
 
         bool isEnemyAlive = false;
         bool isLevelStart = false;
+        bool isLevelInit = false;
         bool isAnswerCorrect = true;
 
         public Game()
@@ -217,8 +218,8 @@ namespace MatheMage
             else
             if (level == "dungeon")
             {
-
-                if (!LastEnemy && !isEnemyAlive)
+                //Движение заднего фона
+                if (!LastEnemy && WaitAfterKill < 60)
                 {
                     BackGroundX1 -= 10;
                     BackGroundX2 -= 10;
@@ -227,7 +228,7 @@ namespace MatheMage
                 //Создание нового противника
                 if (!isEnemyAlive)
                 {
-                    if (WaitAfterKill <= 0)
+                    if (WaitAfterKill <= 0 || !isLevelInit)
                     {
                         EnemyType = Randomize.Rnd(1, 3);
                         if (EnemyType == 1)
@@ -239,7 +240,7 @@ namespace MatheMage
                             EnemyHealth = 1;
                         }
                         isEnemyAlive = true;
-                        WaitAfterKill = 560;
+                        WaitAfterKill = 60;
 
                     }
                     else WaitAfterKill--;
@@ -256,6 +257,10 @@ namespace MatheMage
                     }
                     else Wait++;
                 }
+
+                //Уровень загрузился
+                isLevelInit = true;
+
                 //Проверка ответа на правильность, если прошло 0,5 секунд после последнего ответа
                 if (isAnswered)
                 {
@@ -440,10 +445,10 @@ namespace MatheMage
                 }else
                     spriteBatch.Draw(Hero2, destinationRectangle: new Rectangle(20 * 3, 70 * 3, 64 * 3, 64 * 3));
 
-                if (EnemyType == 1)
+                if (EnemyType == 1 && isEnemyAlive)
                 {
                     spriteBatch.Draw(Sobaka, destinationRectangle: new Rectangle(220 * 3, 75 * 3, 100 * 2, 100 * 2));
-                }else if (EnemyType == 2)
+                }else if (EnemyType == 2 && isEnemyAlive)
                 {
                     spriteBatch.Draw(Ghost, destinationRectangle: new Rectangle(220 * 3, 70 * 3, 32 * 5, 32 * 5));
                 }
