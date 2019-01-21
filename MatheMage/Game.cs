@@ -48,6 +48,7 @@ namespace MatheMage
         int HeroDamage = 1;
         int Gold = 0;
         int KilledEnemies = 0;
+        int HowMuchToKill = 5;
 
         int BackGroundX1 = 0 *3;
         int BackGroundX2 = 320 * 3;
@@ -223,6 +224,11 @@ namespace MatheMage
                 {
                     BackGroundX1 -= 10;
                     BackGroundX2 -= 10;
+                    if(BackGroundX1 <= -320 * 3)
+                    {
+                        BackGroundX1 = 0;
+                        BackGroundX2 = 320 * 3;
+                    }
                 }
 
                 //Создание нового противника
@@ -279,7 +285,7 @@ namespace MatheMage
                                 Gold += 10;
                             }
                             KilledEnemies++;
-                            if (KilledEnemies == 2)
+                            if (KilledEnemies == HowMuchToKill)
                             {
                                 KilledEnemies = 0;
                                 level = "city";
@@ -305,7 +311,7 @@ namespace MatheMage
                                 Gold += 10;
                             }
                             KilledEnemies++;
-                            if (KilledEnemies == 2)
+                            if (KilledEnemies == HowMuchToKill)
                             {
                                 KilledEnemies = 0;
                                 level = "city";
@@ -331,7 +337,7 @@ namespace MatheMage
                                 Gold += 10;
                             }
                             KilledEnemies++;
-                            if (KilledEnemies == 2)
+                            if (KilledEnemies == HowMuchToKill)
                             {
                                 KilledEnemies = 0;
                                 level = "city";
@@ -357,7 +363,7 @@ namespace MatheMage
                                 Gold += 10;
                             }
                             KilledEnemies++;
-                            if (KilledEnemies == 2)
+                            if (KilledEnemies == HowMuchToKill)
                             {
                                 KilledEnemies = 0;
                                 level = "city";
