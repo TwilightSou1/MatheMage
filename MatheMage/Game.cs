@@ -27,8 +27,6 @@ namespace MatheMage
         Texture2D City;
         Texture2D Forge;
         Texture2D FireBall;
-        Texture2D MapBlock;
-        Texture2D MapRoad;
         Texture2D Map;
         Texture2D Ghost;
         SpriteFont PixelCry;
@@ -44,6 +42,8 @@ namespace MatheMage
 
         Vector2 HeroDmagePos = new Vector2(275 * ScreenMultiply, 120 * ScreenMultiply);
 
+        string[] SaveFileI = SaveManager.Loader();
+        string[] SaveFileO = new string[4];
         string[] MathTasks = new string[6];
 
         int EnemyType = 1;
@@ -54,7 +54,7 @@ namespace MatheMage
         int HeroDamage = 1;
         int Gold = 0;
         int KilledEnemies = 0;
-        int HowMuchToKill = 3;
+        int HowMuchToKill = 1;
 
         int BackGroundX1 = 0 * ScreenMultiply;
         int BackGroundX2 = 320 * ScreenMultiply;
@@ -92,6 +92,13 @@ namespace MatheMage
         /// </summary>
         protected override void Initialize()
         {
+            if (SaveFileI[0] != "nothing")
+            {
+                BaseHealth = int.Parse(SaveFileI[1]);
+                HeroDamage = int.Parse(SaveFileI[2]);
+                Gold = int.Parse(SaveFileI[3]);
+            }
+
             this.graphics.PreferredBackBufferHeight = 240 * ScreenMultiply;
             this.graphics.PreferredBackBufferWidth = 320 * ScreenMultiply;
             
@@ -104,7 +111,7 @@ namespace MatheMage
             Health = BaseHealth;
 
             this.IsMouseVisible = true;
-            
+
             base.Initialize();
         }
 
@@ -135,9 +142,6 @@ namespace MatheMage
             Sobaka = this.Content.Load<Texture2D>("Sobaka");
             
             FireBall = this.Content.Load<Texture2D>("fireball");
-
-            MapBlock = this.Content.Load<Texture2D>("MapBlock");
-            MapRoad = this.Content.Load<Texture2D>("MapRoad");
 
             MediaPlayer.Play(MainTheme);
             MediaPlayer.IsRepeating = true;
@@ -302,8 +306,17 @@ namespace MatheMage
                             KilledEnemies++;
                             if (KilledEnemies == HowMuchToKill)
                             {
+                                SaveFileO[1] = BaseHealth.ToString();
+                                SaveFileO[2] = HeroDamage.ToString();
+                                SaveFileO[3] = Gold.ToString();
+
+                                isLevelInit = false;
+                                isLevelStart = false;
+                                Health = BaseHealth;
+
                                 KilledEnemies = 0;
                                 level = "city";
+                                SaveManager.Saver(SaveFileO);
                             }
                             isEnemyAlive = false;
                         }
@@ -328,8 +341,17 @@ namespace MatheMage
                             KilledEnemies++;
                             if (KilledEnemies == HowMuchToKill)
                             {
+                                SaveFileO[1] = BaseHealth.ToString();
+                                SaveFileO[2] = HeroDamage.ToString();
+                                SaveFileO[3] = Gold.ToString();
+
+                                isLevelInit = false;
+                                isLevelStart = false;
+                                Health = BaseHealth;
+
                                 KilledEnemies = 0;
                                 level = "city";
+                                SaveManager.Saver(SaveFileO);
                             }
                             isEnemyAlive = false;
                         }
@@ -354,8 +376,17 @@ namespace MatheMage
                             KilledEnemies++;
                             if (KilledEnemies == HowMuchToKill)
                             {
+                                SaveFileO[1] = BaseHealth.ToString();
+                                SaveFileO[2] = HeroDamage.ToString();
+                                SaveFileO[3] = Gold.ToString();
+
+                                isLevelInit = false;
+                                isLevelStart = false;
+                                Health = BaseHealth;
+
                                 KilledEnemies = 0;
                                 level = "city";
+                                SaveManager.Saver(SaveFileO);
                             }
                             isEnemyAlive = false;
                         }
@@ -380,12 +411,17 @@ namespace MatheMage
                             KilledEnemies++;
                             if (KilledEnemies == HowMuchToKill)
                             {
+                                SaveFileO[1] = BaseHealth.ToString();
+                                SaveFileO[2] = HeroDamage.ToString();
+                                SaveFileO[3] = Gold.ToString();
+
                                 isLevelInit = false;
                                 isLevelStart = false;
                                 Health = BaseHealth;
 
                                 KilledEnemies = 0;
                                 level = "city";
+                                SaveManager.Saver(SaveFileO);
                             }
                             isEnemyAlive = false;
                         }
@@ -402,6 +438,7 @@ namespace MatheMage
                             Exit();
                         }
                     }
+
                 }
                 
             }
