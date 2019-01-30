@@ -11,6 +11,7 @@ namespace MatheMage
         //Генерация заданий
         public static string[] Generate(int diff)
         {
+            bool check = false;
             Random rnd = new Random();
             if (diff == 1)
             {
@@ -38,14 +39,24 @@ namespace MatheMage
                         ssym = ".";
                         break;
                 }
-                output[0] = f1.ToString() + ' ' + ssym.ToString() + f2.ToString() + " = x" ;
-                int ansnum = rnd.Next(1, 4);
-                output[1] = rnd.Next(0, 200).ToString();
-                output[2] = rnd.Next(0, 200).ToString();
-                output[3] = rnd.Next(0, 200).ToString();
-                output[4] = rnd.Next(0, 200).ToString();
-                output[5] = ansnum.ToString();
-                output[ansnum] = ans.ToString();
+                output[0] = f1.ToString() + ' ' + ssym.ToString() + " " + f2.ToString() + " = x" ;
+                int anssnum = rnd.Next(1, 4);
+
+                for (int i = 1; i <= 4; i++)
+                {
+                    check = false;
+                    while (!check)
+                    {
+                        output[i] = rnd.Next(Convert.ToInt32(ans) - 10, Convert.ToInt32(ans + 10)).ToString();
+                        if (Convert.ToInt32(output[i]) != ans)
+                        {
+                            check = true;
+                        }
+                    }
+                }
+
+                output[5] = anssnum.ToString();
+                output[anssnum] = ans.ToString();
                 return output;
             }else
                 return null;
