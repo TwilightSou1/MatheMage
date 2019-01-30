@@ -17,6 +17,9 @@ namespace MatheMage
 
         Song MainTheme;
 
+        Texture2D MapStart;
+        Texture2D MapRoad;
+        Texture2D MapEnd;
         Texture2D DungeonBackground;
         Texture2D ForestBackGround;
         Texture2D WhileBackground;
@@ -54,12 +57,15 @@ namespace MatheMage
         int HeroDamage = 1;
         int Gold = 0;
         int KilledEnemies = 0;
-        int HowMuchToKill = 1;
+        int HowMuchToKill = 5;
+
+        int DogHealth = 1;
+        int GhostHealth = 1;
 
         int BackGroundX1 = 0 * ScreenMultiply;
         int BackGroundX2 = 320 * ScreenMultiply;
 
-        int WaitAfterKill = 60;
+        int WaitAfterKill = 120;
         int Wait = 0;
         int FrameCount = 1;
 
@@ -143,6 +149,10 @@ namespace MatheMage
             
             FireBall = this.Content.Load<Texture2D>("fireball");
 
+            MapStart = this.Content.Load<Texture2D>("MapStart");
+            MapRoad = this.Content.Load<Texture2D>("MapRoad");
+            MapEnd = this.Content.Load<Texture2D>("MapEnd");
+
             MediaPlayer.Play(MainTheme);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
@@ -151,15 +161,6 @@ namespace MatheMage
         void MediaPlayer_MediaStateChanged(object sender, System.EventArgs e)
         {
             MediaPlayer.Volume = 1f;
-        }
-
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>
@@ -237,14 +238,17 @@ namespace MatheMage
             if (level == "dungeon")
             {
                 //Движение заднего фона
-                if (!LastEnemy && WaitAfterKill < 60)
+                if (!LastEnemy && WaitAfterKill < 120)
                 {
-                    BackGroundX1 -= 10;
-                    BackGroundX2 -= 10;
-                    if(BackGroundX1 <= -320 * ScreenMultiply)
+                    if (WaitAfterKill < 60)
                     {
-                        BackGroundX1 = 0;
-                        BackGroundX2 = 320 * ScreenMultiply;
+                        BackGroundX1 -= 10;
+                        BackGroundX2 -= 10;
+                        if (BackGroundX1 <= -320 * ScreenMultiply)
+                        {
+                            BackGroundX1 = 0;
+                            BackGroundX2 = 320 * ScreenMultiply;
+                        }
                     }
                 }
 
@@ -257,15 +261,15 @@ namespace MatheMage
                         if (EnemyType == 1)
                         {
                             EnemyDamage = 1;
-                            EnemyHealth = 10;
+                            EnemyHealth = DogHealth;
                         }
                         else if (EnemyType == 2)
                         {
                             EnemyDamage = 2;
-                            EnemyHealth = 5;
+                            EnemyHealth = GhostHealth;
                         }
                         isEnemyAlive = true;
-                        WaitAfterKill = 60;
+                        WaitAfterKill = 120;
 
                     }
                     else WaitAfterKill--;

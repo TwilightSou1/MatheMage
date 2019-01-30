@@ -16,28 +16,34 @@ namespace MatheMage
             if (diff == 1)
             {
                 string[] output = new string[6];
-                int f1 = rnd.Next(1, 99);
-                int f2 = rnd.Next(1, 99);
+                
                 int sym = rnd.Next(1, 4);
-                int ans = 0;
-                string ssym;
-                switch (sym)
+                int ans = -1;
+                int f1 = 0;
+                int f2 = 0;
+                string ssym = ".";
+                while (ans > 200 || ans < 0)
                 {
-                    case 1:
-                        ssym = "+";
-                        ans = f1 + f2;
-                        break;
-                    case 2:
-                        ssym = "-";
-                        ans = f1 - f2;
-                        break;
-                    case 3:
-                        ssym = "*";
-                        ans = f1 * f2;
-                        break;
-                    default:
-                        ssym = ".";
-                        break;
+                    f1 = rnd.Next(1, 99);
+                    f2 = rnd.Next(1, 99);
+                    switch (sym)
+                    {
+                        case 1:
+                            ssym = "+";
+                            ans = f1 + f2;
+                            break;
+                        case 2:
+                            ssym = "-";
+                            ans = f1 - f2;
+                            break;
+                        case 3:
+                            ssym = "*";
+                            ans = f1 * f2;
+                            break;
+                        default:
+                            ssym = ".";
+                            break;
+                    }
                 }
                 output[0] = f1.ToString() + ' ' + ssym.ToString() + " " + f2.ToString() + " = x" ;
                 int anssnum = rnd.Next(1, 4);
