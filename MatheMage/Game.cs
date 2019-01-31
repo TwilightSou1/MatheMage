@@ -277,7 +277,7 @@ namespace MatheMage
                 //Ожидание после ответа(Нужно для адекватных анимаций)
                 if (!isAnswered)
                 {
-                    if (Wait == 30)
+                    if (Wait == 120 || !isLevelInit)
                     {
                         MathTasks = TaskGen.Generate(1);
                         isAnswered = true;
@@ -439,7 +439,21 @@ namespace MatheMage
                         isAnswerCorrect = false;
                         if (Health == 0)
                         {
-                            Exit();
+                            level = "city";
+                            Gold = 0;
+                            HeroDamage = 0;
+
+                            SaveFileO[1] = BaseHealth.ToString();
+                            SaveFileO[2] = HeroDamage.ToString();
+                            SaveFileO[3] = Gold.ToString();
+
+                            isLevelInit = false;
+                            isLevelStart = false;
+                            Health = BaseHealth;
+
+                            KilledEnemies = 0;
+
+                            SaveManager.Saver(SaveFileO);
                         }
                     }
 
