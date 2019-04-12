@@ -5,9 +5,6 @@ using Microsoft.Xna.Framework.Media;
 
 namespace MatheMage
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
     public class Game : Microsoft.Xna.Framework.Game
     {
         const int ScreenMultiply = 3;
@@ -17,11 +14,13 @@ namespace MatheMage
 
         Song MainTheme;
 
+        Texture2D MainMenu;
+        Texture2D ShopBackground;
+        Texture2D BlowParticle;
         Texture2D MapStart;
         Texture2D MapRoad;
         Texture2D MapEnd;
         Texture2D DungeonBackground;
-        Texture2D ForestBackGround;
         Texture2D WhileBackground;
         Texture2D Hero1;
         Texture2D Hero2;
@@ -45,6 +44,9 @@ namespace MatheMage
 
         Vector2 HeroDmagePos = new Vector2(275 * ScreenMultiply, 120 * ScreenMultiply);
 
+        int[] BlowParticlePositionX = new int[50];
+        int[] BlowParticlePositionY = new int[50];
+
         string[] SaveFileI = SaveManager.Loader();
         string[] SaveFileO = new string[4];
         string[] MathTasks = new string[6];
@@ -59,8 +61,11 @@ namespace MatheMage
         int KilledEnemies = 0;
         int HowMuchToKill = 5;
 
-        int DogHealth = 1;
-        int GhostHealth = 1;
+        int DogHealth = 10;
+        int GhostHealth = 5;
+
+        double DifficultyMultiply = 0;
+        double GoldMultiply = 0;
 
         int BackGroundX1 = 0 * ScreenMultiply;
         int BackGroundX2 = 320 * ScreenMultiply;
@@ -70,8 +75,9 @@ namespace MatheMage
         int FrameCount = 1;
 
         int FireBallXPos = 20 * ScreenMultiply;
+        int BlowParticleSize = 0;
 
-        string level = "city";
+        string level = "menu";
         bool isAnswered = false;
 
         bool LastEnemy = false;
@@ -87,15 +93,9 @@ namespace MatheMage
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            
+
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
         protected override void Initialize()
         {
             if (SaveFileI[0] != "nothing")
@@ -107,7 +107,7 @@ namespace MatheMage
 
             this.graphics.PreferredBackBufferHeight = 240 * ScreenMultiply;
             this.graphics.PreferredBackBufferWidth = 320 * ScreenMultiply;
-            
+
             //graphics.ToggleFullScreen();
             graphics.ApplyChanges();
 
@@ -121,22 +121,22 @@ namespace MatheMage
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             MainTheme = this.Content.Load<Song>("lich-technical_941_use_only_when_nesessary");
 
+            BlowParticle = this.Content.Load<Texture2D>("BlowParticle");
+
             PixelCry = this.Content.Load<SpriteFont>("PixelCry");
-            // TODO: use this.Content to load your game content here
+
+            MainMenu = this.Content.Load<Texture2D>("MainMenu");
+            ShopBackground = this.Content.Load<Texture2D>("Shop");
             DungeonBackground = this.Content.Load<Texture2D>("BackGround");
             WhileBackground = this.Content.Load<Texture2D>("WhileBackground");
-            ForestBackGround = this.Content.Load<Texture2D>("ForestBackGround");
             City = this.Content.Load<Texture2D>("city");
             Map = this.Content.Load<Texture2D>("map");
             Forge = this.Content.Load<Texture2D>("Forge");
@@ -146,7 +146,7 @@ namespace MatheMage
             Ghost = this.Content.Load<Texture2D>("Ghost");
             Hero2 = this.Content.Load<Texture2D>("Hero2");
             Sobaka = this.Content.Load<Texture2D>("Sobaka");
-            
+
             FireBall = this.Content.Load<Texture2D>("fireball");
 
             MapStart = this.Content.Load<Texture2D>("MapStart");
@@ -163,11 +163,6 @@ namespace MatheMage
             MediaPlayer.Volume = 1f;
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
             MouseState currentMouseState = Mouse.GetState();
@@ -177,25 +172,45 @@ namespace MatheMage
                 FrameCount++;
             }
             else FrameCount = 1;
-            
-            if (level == "city")
+
+            if (level == "menu")
             {
-                if(currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 265 * ScreenMultiply && currentMouseState.Position.X < 320 * ScreenMultiply && currentMouseState.Position.Y > 80 * ScreenMultiply && currentMouseState.Position.Y < 115 * ScreenMultiply)
+                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 104 * ScreenMultiply && currentMouseState.Position.X < 221 * ScreenMultiply && currentMouseState.Position.Y > 88 * ScreenMultiply && currentMouseState.Position.Y < 130 * ScreenMultiply)
+                {
+                    level = "city";
+                }
+            }
+            else if (level == "city")
+            {
+                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 265 * ScreenMultiply && currentMouseState.Position.X < 320 * ScreenMultiply && currentMouseState.Position.Y > 80 * ScreenMultiply && currentMouseState.Position.Y < 115 * ScreenMultiply)
                 {
                     level = "map";
-                }else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 185 * ScreenMultiply && currentMouseState.Position.X < 252 * ScreenMultiply && currentMouseState.Position.Y > 40 * ScreenMultiply && currentMouseState.Position.Y < 96 * ScreenMultiply)
+                }
+                else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 185 * ScreenMultiply && currentMouseState.Position.X < 252 * ScreenMultiply && currentMouseState.Position.Y > 40 * ScreenMultiply && currentMouseState.Position.Y < 96 * ScreenMultiply)
                 {
                     ChangeReady = true;
-                }else
-                if (ChangeReady == true && Wait == 15)
+                }
+                else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 21 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 52 * ScreenMultiply && currentMouseState.Position.Y < 97 * ScreenMultiply)
+                {
+                    level = "shop";
+                }
+                else if (ChangeReady == true && Wait == 15)
                 {
                     level = "forge";
                     ChangeReady = false;
                     Wait = 0;
                 }
                 else if (ChangeReady == true) Wait++;
-                
-            }else if(level == "forge")
+
+            }
+            else if (level == "shop")
+            {
+                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 47 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 17 * ScreenMultiply)
+                {
+                    level = "city";
+                }
+            }
+            else if (level == "forge")
             {
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 18 * ScreenMultiply && currentMouseState.Position.X < 86 * ScreenMultiply && currentMouseState.Position.Y > 8 * ScreenMultiply && currentMouseState.Position.Y < 40 * ScreenMultiply)
                 {
@@ -223,16 +238,17 @@ namespace MatheMage
                 }
                 else if (UpgradeChangeReady == true) Wait++;
             }
-            else if(level == "map")
+            else if (level == "map")
             {
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 140 * ScreenMultiply && currentMouseState.Position.X < 155 * ScreenMultiply && currentMouseState.Position.Y > 50 * ScreenMultiply && currentMouseState.Position.Y < 65 * ScreenMultiply)
                 {
+                    DifficultyMultiply = Gold * Gold / 1000;
                     level = "dungeon";
+
+                    DogHealth *= (int)DifficultyMultiply;
+                    GhostHealth *= (int)DifficultyMultiply;
                 }
-                else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 197 * ScreenMultiply && currentMouseState.Position.X < 210 * ScreenMultiply && currentMouseState.Position.Y > 100 * ScreenMultiply && currentMouseState.Position.Y < 113 * ScreenMultiply)
-                {
-                    level = "forest";
-                }
+
             }
             else
             if (level == "dungeon")
@@ -240,6 +256,20 @@ namespace MatheMage
                 //Движение заднего фона
                 if (!LastEnemy && WaitAfterKill < 120)
                 {
+                    if (WaitAfterKill > 60)
+                    {
+                        for (int x = 0; x < BlowParticlePositionX.Length; x++)
+                        {
+                            BlowParticlePositionX[x] = Randomize.Rnd(220 * ScreenMultiply, 284 * ScreenMultiply);
+                        }
+
+                        for (int y = 0; y < BlowParticlePositionY.Length; y++)
+                        {
+                            BlowParticlePositionY[y] = Randomize.Rnd(75 * ScreenMultiply, 110 * ScreenMultiply);
+                        }
+
+                    }
+
                     if (WaitAfterKill < 60)
                     {
                         BackGroundX1 -= 10;
@@ -303,7 +333,8 @@ namespace MatheMage
                             if (EnemyType == 1)
                             {
                                 Gold += 5;
-                            }else if (EnemyType == 2)
+                            }
+                            else if (EnemyType == 2)
                             {
                                 Gold += 10;
                             }
@@ -437,7 +468,7 @@ namespace MatheMage
                         isAnswered = false;
                         Health -= EnemyDamage;
                         isAnswerCorrect = false;
-                        if (Health == 0)
+                        if (Health <= 0)
                         {
                             level = "city";
                             Gold = 0;
@@ -458,7 +489,7 @@ namespace MatheMage
                     }
 
                 }
-                
+
             }
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -475,12 +506,29 @@ namespace MatheMage
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
+            if (level == "menu")
+            {
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
+
+                spriteBatch.Draw(MainMenu, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
+
+                spriteBatch.End();
+            }
             if (level == "city")
             {
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
 
                 spriteBatch.Draw(City, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
                 spriteBatch.DrawString(PixelCry, Gold.ToString(), HealthPos, Color.Yellow);
+
+                spriteBatch.End();
+            }
+            else
+            if (level == "shop")
+            {
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
+
+                spriteBatch.Draw(ShopBackground, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
 
                 spriteBatch.End();
             }
@@ -492,7 +540,8 @@ namespace MatheMage
                 spriteBatch.Draw(Map, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
 
                 spriteBatch.End();
-            }else
+            }
+            else
             if (level == "forge")
             {
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
@@ -501,7 +550,8 @@ namespace MatheMage
                 spriteBatch.DrawString(PixelCry, HeroDamage.ToString(), HeroDmagePos, Color.White);
 
                 spriteBatch.End();
-            }else
+            }
+            else
             if (level == "dungeon")
             {
 
@@ -515,32 +565,44 @@ namespace MatheMage
                 {
                     spriteBatch.Draw(WhileBackground, destinationRectangle: new Rectangle(BackGroundX1, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
                     spriteBatch.Draw(WhileBackground, destinationRectangle: new Rectangle(BackGroundX2, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
-                    
                 }
                 spriteBatch.Draw(ChooseMenu, destinationRectangle: new Rectangle(0, 150 * ScreenMultiply, 320 * ScreenMultiply, 90 * ScreenMultiply));
                 //Анимация раз в 0,5 секунды
                 if (FrameCount <= 30)
                 {
                     spriteBatch.Draw(Hero1, destinationRectangle: new Rectangle(20 * ScreenMultiply, 70 * ScreenMultiply, 64 * ScreenMultiply, 64 * ScreenMultiply));
-                }else
+                }
+                else
                     spriteBatch.Draw(Hero2, destinationRectangle: new Rectangle(20 * ScreenMultiply, 70 * ScreenMultiply, 64 * ScreenMultiply, 64 * ScreenMultiply));
 
                 if (EnemyType == 1 && isEnemyAlive)
                 {
                     spriteBatch.Draw(Sobaka, destinationRectangle: new Rectangle(220 * ScreenMultiply, 75 * ScreenMultiply, 100 * (ScreenMultiply - 1), 100 * (ScreenMultiply - 1)));
-                }else if (EnemyType == 2 && isEnemyAlive)
-                {
-                    spriteBatch.Draw(Ghost, destinationRectangle: new Rectangle(220 * ScreenMultiply, 70 * ScreenMultiply, 32 * (ScreenMultiply + 2), 32 * (ScreenMultiply+2)));
                 }
-                //spriteBatch.DrawString(PixelCry, screenWidth.ToString(), Vector2.Zero, Color.Red);
+                else if (EnemyType == 2 && isEnemyAlive)
+                {
+                    spriteBatch.Draw(Ghost, destinationRectangle: new Rectangle(220 * ScreenMultiply, 70 * ScreenMultiply, 32 * (ScreenMultiply + 2), 32 * (ScreenMultiply + 2)));
+                }
 
                 if (!isAnswered && isLevelStart && isAnswerCorrect)
                 {
-                    spriteBatch.Draw(FireBall, destinationRectangle: new Rectangle(FireBallXPos * ScreenMultiply, 100 * ScreenMultiply, 12 * ScreenMultiply, 12 * ScreenMultiply));
-                    FireBallXPos += 7;
+                    if (FireBallXPos <= 250)
+                    {
+                        spriteBatch.Draw(FireBall, destinationRectangle: new Rectangle(FireBallXPos * ScreenMultiply, 100 * ScreenMultiply, 12 * ScreenMultiply, 12 * ScreenMultiply));
+                        FireBallXPos += 2 * ScreenMultiply;
+                        BlowParticleSize = FireBallXPos;
+                    }
+                    else if(BlowParticleSize <= 150*ScreenMultiply && isEnemyAlive)
+                    {
+                        spriteBatch.Draw(BlowParticle, destinationRectangle: new Rectangle((FireBallXPos * ScreenMultiply) - 20 * ScreenMultiply, (100 * ScreenMultiply) - 20 * ScreenMultiply, BlowParticleSize/20 * ScreenMultiply, BlowParticleSize/20 * ScreenMultiply));
+                        BlowParticleSize += 3 * ScreenMultiply;
+                    }
                 }
                 else
+                {
                     FireBallXPos = 10 * ScreenMultiply;
+                }
+
 
                 //Отрисовка заданий
                 if (isAnswered == true)
@@ -555,13 +617,6 @@ namespace MatheMage
                 //Отрисовка хп
                 spriteBatch.DrawString(PixelCry, EnemyHealth.ToString(), EnemyHealthPos, Color.Red);
                 spriteBatch.DrawString(PixelCry, Health.ToString(), HealthPos, Color.Red);
-
-                spriteBatch.End();
-            }else if(level == "forest")
-            {
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
-
-                spriteBatch.Draw(ForestBackGround, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
 
                 spriteBatch.End();
             }
