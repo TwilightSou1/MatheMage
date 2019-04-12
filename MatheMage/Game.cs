@@ -179,6 +179,11 @@ namespace MatheMage
                 {
                     level = "city";
                 }
+                else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
+                {
+                    SaveManager.Saver(new string[4] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString() });
+                    Exit();
+                }
             }
             else if (level == "city")
             {
@@ -199,6 +204,10 @@ namespace MatheMage
                     level = "forge";
                     ChangeReady = false;
                     Wait = 0;
+                }
+                else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 114 * ScreenMultiply && currentMouseState.Position.Y < 148 * ScreenMultiply)
+                {
+                    level = "menu";
                 }
                 else if (ChangeReady == true) Wait++;
 
@@ -250,7 +259,10 @@ namespace MatheMage
                     DogHealth *= (int)DifficultyMultiply;
                     GhostHealth *= (int)DifficultyMultiply;
                 }
-
+                else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
+                {
+                    level = "city";
+                }
             }
             else
             if (level == "dungeon")
@@ -521,7 +533,7 @@ namespace MatheMage
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
 
                 spriteBatch.Draw(City, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
-                spriteBatch.DrawString(PixelCry, Gold.ToString(), HealthPos, Color.Yellow);
+                spriteBatch.DrawString(PixelCry, Gold.ToString(), new Vector2(300*ScreenMultiply, 0), Color.Yellow);
 
                 spriteBatch.End();
             }
