@@ -229,7 +229,7 @@ namespace MatheMage
                     UpgradeChangeReady = true;
                 }
                 else
-                if (UpgradeChangeReady == true && Wait == 15)
+                if (UpgradeChangeReady == true && Wait == 3)
                 {
                     HeroDamage++;
                     UpgradeChangeReady = false;
@@ -242,7 +242,9 @@ namespace MatheMage
             {
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 140 * ScreenMultiply && currentMouseState.Position.X < 155 * ScreenMultiply && currentMouseState.Position.Y > 50 * ScreenMultiply && currentMouseState.Position.Y < 65 * ScreenMultiply)
                 {
-                    DifficultyMultiply = Gold * Gold / 1000;
+                    DifficultyMultiply = Gold * Gold / 1000 + 1;
+                    GoldMultiply = HeroDamage * HeroDamage / 10 + 1;
+
                     level = "dungeon";
 
                     DogHealth *= (int)DifficultyMultiply;
@@ -332,11 +334,11 @@ namespace MatheMage
                         {
                             if (EnemyType == 1)
                             {
-                                Gold += 5;
+                                Gold += 5 * (int)GoldMultiply;
                             }
                             else if (EnemyType == 2)
                             {
-                                Gold += 10;
+                                Gold += 10 * (int)GoldMultiply;
                             }
                             KilledEnemies++;
                             if (KilledEnemies == HowMuchToKill)
@@ -367,11 +369,11 @@ namespace MatheMage
                         {
                             if (EnemyType == 1)
                             {
-                                Gold += 5;
+                                Gold += 5 * (int)GoldMultiply;
                             }
                             else if (EnemyType == 2)
                             {
-                                Gold += 10;
+                                Gold += 10 * (int)GoldMultiply;
                             }
                             KilledEnemies++;
                             if (KilledEnemies == HowMuchToKill)
@@ -402,11 +404,11 @@ namespace MatheMage
                         {
                             if (EnemyType == 1)
                             {
-                                Gold += 5;
+                                Gold += 5 * (int)GoldMultiply;
                             }
                             else if (EnemyType == 2)
                             {
-                                Gold += 10;
+                                Gold += 10 * (int)GoldMultiply;
                             }
                             KilledEnemies++;
                             if (KilledEnemies == HowMuchToKill)
@@ -437,11 +439,11 @@ namespace MatheMage
                         {
                             if (EnemyType == 1)
                             {
-                                Gold += 5;
+                                Gold += 5 * (int)GoldMultiply;
                             }
                             else if (EnemyType == 2)
                             {
-                                Gold += 10;
+                                Gold += 10 * (int)GoldMultiply;
                             }
                             KilledEnemies++;
                             if (KilledEnemies == HowMuchToKill)
