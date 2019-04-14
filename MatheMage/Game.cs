@@ -75,6 +75,7 @@ namespace MatheMage
         int Wait = 0;
         int FrameCount = 1;
 
+        int TimerXPos = 0;
         int FireBallXPos = 20 * ScreenMultiply;
         int BlowParticleSize = 0;
 
@@ -248,9 +249,14 @@ namespace MatheMage
             }
             else if (level == "shop")
             {
-                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 48 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 17 * ScreenMultiply)
+                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 48 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
                 {
                     level = "city";
+                }
+                if (Gold >= 100000 && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 93 * ScreenMultiply && currentMouseState.Position.X < 232 * ScreenMultiply && currentMouseState.Position.Y > 107 * ScreenMultiply && currentMouseState.Position.Y < 136 * ScreenMultiply)
+                {
+                    level = "city";
+                    Gold -= 100000;
                 }
             }
             else if (level == "forge")
@@ -285,8 +291,8 @@ namespace MatheMage
             {
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 140 * ScreenMultiply && currentMouseState.Position.X < 155 * ScreenMultiply && currentMouseState.Position.Y > 50 * ScreenMultiply && currentMouseState.Position.Y < 65 * ScreenMultiply)
                 {
-                    DifficultyMultiply = HeroDamage * HeroDamage / 100 + 1;
-                    GoldMultiply = HeroDamage * HeroDamage / 10 + 1;
+                    DifficultyMultiply = HeroDamage * BaseHealth / 30 + 1;
+                    GoldMultiply = HeroDamage * BaseHealth / 10 + 1;
 
                     level = "dungeon";
 
@@ -371,11 +377,13 @@ namespace MatheMage
                 //Проверка ответа на правильность, если прошло 0,5 секунд после последнего ответа
                 if (isAnswered)
                 {
+                    TimerXPos++;
                     if (MathTasks[5] == "4" && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 200 * ScreenMultiply && currentMouseState.Position.X < 310 * ScreenMultiply && currentMouseState.Position.Y > 215 * ScreenMultiply && currentMouseState.Position.Y < 235 * ScreenMultiply)  //НП
                     {
                         isAnswered = false;
                         EnemyHealth -= HeroDamage;
                         isAnswerCorrect = true;
+                        TimerXPos = 0;
                         if (EnemyHealth <= 0)
                         {
                             if (EnemyType == 1)
@@ -411,6 +419,7 @@ namespace MatheMage
                         isAnswered = false;
                         EnemyHealth -= HeroDamage;
                         isAnswerCorrect = true;
+                        TimerXPos = 0;
                         if (EnemyHealth <= 0)
                         {
                             if (EnemyType == 1)
@@ -446,6 +455,7 @@ namespace MatheMage
                         isAnswered = false;
                         EnemyHealth -= HeroDamage;
                         isAnswerCorrect = true;
+                        TimerXPos = 0;
                         if (EnemyHealth <= 0)
                         {
                             if (EnemyType == 1)
@@ -481,6 +491,7 @@ namespace MatheMage
                         isAnswered = false;
                         EnemyHealth -= HeroDamage;
                         isAnswerCorrect = true;
+                        TimerXPos = 0;
                         if (EnemyHealth <= 0)
                         {
                             if (EnemyType == 1)
@@ -511,11 +522,12 @@ namespace MatheMage
                     }
                     else
 
-                    if (currentMouseState.LeftButton == ButtonState.Pressed && ((currentMouseState.Position.X > 200 * ScreenMultiply && currentMouseState.Position.X < 310 * ScreenMultiply && currentMouseState.Position.Y > 192 * ScreenMultiply && currentMouseState.Position.Y < 208 * ScreenMultiply) || (currentMouseState.Position.X > 200 * ScreenMultiply && currentMouseState.Position.X < 310 * ScreenMultiply && currentMouseState.Position.Y > 215 * ScreenMultiply && currentMouseState.Position.Y < 235 * ScreenMultiply) || (currentMouseState.Position.X > 20 * ScreenMultiply && currentMouseState.Position.X < 130 * ScreenMultiply && currentMouseState.Position.Y > 215 * ScreenMultiply && currentMouseState.Position.Y < 235 * ScreenMultiply) || (currentMouseState.Position.X > 20 * ScreenMultiply && currentMouseState.Position.X < 130 * ScreenMultiply && currentMouseState.Position.Y > 192 * ScreenMultiply && currentMouseState.Position.Y < 208 * ScreenMultiply)))
+                    if ((currentMouseState.LeftButton == ButtonState.Pressed && ((currentMouseState.Position.X > 200 * ScreenMultiply && currentMouseState.Position.X < 310 * ScreenMultiply && currentMouseState.Position.Y > 192 * ScreenMultiply && currentMouseState.Position.Y < 208 * ScreenMultiply) || (currentMouseState.Position.X > 200 * ScreenMultiply && currentMouseState.Position.X < 310 * ScreenMultiply && currentMouseState.Position.Y > 215 * ScreenMultiply && currentMouseState.Position.Y < 235 * ScreenMultiply) || (currentMouseState.Position.X > 20 * ScreenMultiply && currentMouseState.Position.X < 130 * ScreenMultiply && currentMouseState.Position.Y > 215 * ScreenMultiply && currentMouseState.Position.Y < 235 * ScreenMultiply) || (currentMouseState.Position.X > 20 * ScreenMultiply && currentMouseState.Position.X < 130 * ScreenMultiply && currentMouseState.Position.Y > 192 * ScreenMultiply && currentMouseState.Position.Y < 208 * ScreenMultiply))) || TimerXPos >= 320)
                     {
                         isAnswered = false;
                         Health -= EnemyDamage;
                         isAnswerCorrect = false;
+                        TimerXPos = 0;
                         if (Health <= 0)
                         {
                             level = "city";
@@ -567,7 +579,7 @@ namespace MatheMage
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
 
                 spriteBatch.Draw(City, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
-                spriteBatch.DrawString(PixelCry, Gold.ToString(), new Vector2(300*ScreenMultiply, 0), Color.Yellow);
+                spriteBatch.DrawString(PixelCry, "Золото: " + Gold.ToString(), new Vector2(220*ScreenMultiply, 0), Color.Yellow);
 
                 spriteBatch.End();
             }
@@ -662,15 +674,16 @@ namespace MatheMage
                 }
 
 
-                //Отрисовка заданий
+                //Отрисовка заданий и таймера
                 if (isAnswered == true)
                 {
+                    spriteBatch.Draw(WhileBackground, destinationRectangle: new Rectangle(0 - TimerXPos * ScreenMultiply, 150 * ScreenMultiply, 320 * ScreenMultiply, 5 * ScreenMultiply), color: Color.Red);
+
                     spriteBatch.DrawString(PixelCry, MathTasks[0], taskPos0, Color.White);
                     spriteBatch.DrawString(PixelCry, MathTasks[1], taskPos1, Color.White); //ВЛ 1
                     spriteBatch.DrawString(PixelCry, MathTasks[2], taskPos2, Color.White); //НЛ 2
                     spriteBatch.DrawString(PixelCry, MathTasks[3], taskPos3, Color.White); //ВП 3
                     spriteBatch.DrawString(PixelCry, MathTasks[4], taskPos4, Color.White); //НП 4
-                                                                                           //=======
                 }
                 //Отрисовка хп
                 spriteBatch.DrawString(PixelCry, EnemyHealth.ToString(), EnemyHealthPos, Color.Red);
