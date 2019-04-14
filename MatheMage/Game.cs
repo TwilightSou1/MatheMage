@@ -17,6 +17,7 @@ namespace MatheMage
         Texture2D MainMenu;
         Texture2D ShopBackground;
         Texture2D BlowParticle;
+        Texture2D HospitalRoom;
         Texture2D MapStart;
         Texture2D MapRoad;
         Texture2D MapEnd;
@@ -59,7 +60,7 @@ namespace MatheMage
         int HeroDamage = 1;
         int Gold = 0;
         int KilledEnemies = 0;
-        int HowMuchToKill = 5;
+        int HowMuchToKill = 2;
 
         int DogHealth = 10;
         int GhostHealth = 5;
@@ -135,6 +136,7 @@ namespace MatheMage
 
             MainMenu = this.Content.Load<Texture2D>("MainMenu");
             ShopBackground = this.Content.Load<Texture2D>("Shop");
+            HospitalRoom = this.Content.Load<Texture2D>("HospitalRoom");
             DungeonBackground = this.Content.Load<Texture2D>("BackGround");
             WhileBackground = this.Content.Load<Texture2D>("WhileBackground");
             City = this.Content.Load<Texture2D>("city");
@@ -208,13 +210,45 @@ namespace MatheMage
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 114 * ScreenMultiply && currentMouseState.Position.Y < 148 * ScreenMultiply)
                 {
                     level = "menu";
+                } else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 98 * ScreenMultiply && currentMouseState.Position.X < 158 * ScreenMultiply && currentMouseState.Position.Y > 41 * ScreenMultiply && currentMouseState.Position.Y < 94 * ScreenMultiply)
+                {
+                    level = "hospital";
+                }
+                else if (ChangeReady == true) Wait++;
+            }
+            else if(level == "hospital")
+            {
+                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 18 * ScreenMultiply && currentMouseState.Position.X < 86 * ScreenMultiply && currentMouseState.Position.Y > 8 * ScreenMultiply && currentMouseState.Position.Y < 40 * ScreenMultiply)
+                {
+                    ChangeReady = true;
+                }
+                else
+                if (ChangeReady == true && Wait == 15)
+                {
+                    level = "city";
+                    ChangeReady = false;
+                    Wait = 0;
                 }
                 else if (ChangeReady == true) Wait++;
 
+                else if (Gold >= 50 && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 158 * ScreenMultiply && currentMouseState.Position.X < 272 * ScreenMultiply && currentMouseState.Position.Y > 120 * ScreenMultiply && currentMouseState.Position.Y < 161 * ScreenMultiply)
+                {
+                    UpgradeChangeReady = true;
+                }
+                else
+                if (UpgradeChangeReady == true && Wait == 3)
+                {
+                    BaseHealth++;
+                    UpgradeChangeReady = false;
+                    Wait = 0;
+                    Gold -= 50;
+                    Health = BaseHealth;
+                }
+                else if (UpgradeChangeReady == true) Wait++;
             }
             else if (level == "shop")
             {
-                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 47 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 17 * ScreenMultiply)
+                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 48 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 17 * ScreenMultiply)
                 {
                     level = "city";
                 }
@@ -251,7 +285,7 @@ namespace MatheMage
             {
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 140 * ScreenMultiply && currentMouseState.Position.X < 155 * ScreenMultiply && currentMouseState.Position.Y > 50 * ScreenMultiply && currentMouseState.Position.Y < 65 * ScreenMultiply)
                 {
-                    DifficultyMultiply = Gold * Gold / 1000 + 1;
+                    DifficultyMultiply = HeroDamage * HeroDamage / 100 + 1;
                     GoldMultiply = HeroDamage * HeroDamage / 10 + 1;
 
                     level = "dungeon";
@@ -562,6 +596,16 @@ namespace MatheMage
 
                 spriteBatch.Draw(Forge, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 240 * ScreenMultiply));
                 spriteBatch.DrawString(PixelCry, HeroDamage.ToString(), HeroDmagePos, Color.White);
+
+                spriteBatch.End();
+            }
+            else
+            if (level == "hospital")
+            {
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
+
+                spriteBatch.Draw(HospitalRoom, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 240 * ScreenMultiply));
+                spriteBatch.DrawString(PixelCry, BaseHealth.ToString(), HeroDmagePos, Color.Red);
 
                 spriteBatch.End();
             }
