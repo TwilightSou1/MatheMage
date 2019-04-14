@@ -18,9 +18,6 @@ namespace MatheMage
         Texture2D ShopBackground;
         Texture2D BlowParticle;
         Texture2D HospitalRoom;
-        Texture2D MapStart;
-        Texture2D MapRoad;
-        Texture2D MapEnd;
         Texture2D DungeonBackground;
         Texture2D WhileBackground;
         Texture2D Hero1;
@@ -152,10 +149,6 @@ namespace MatheMage
 
             FireBall = this.Content.Load<Texture2D>("fireball");
 
-            MapStart = this.Content.Load<Texture2D>("MapStart");
-            MapRoad = this.Content.Load<Texture2D>("MapRoad");
-            MapEnd = this.Content.Load<Texture2D>("MapEnd");
-
             MediaPlayer.Play(MainTheme);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
@@ -192,7 +185,7 @@ namespace MatheMage
             {
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 265 * ScreenMultiply && currentMouseState.Position.X < 320 * ScreenMultiply && currentMouseState.Position.Y > 80 * ScreenMultiply && currentMouseState.Position.Y < 115 * ScreenMultiply)
                 {
-                    level = "map";
+                    level = "dungeon";
                 }
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 185 * ScreenMultiply && currentMouseState.Position.X < 252 * ScreenMultiply && currentMouseState.Position.Y > 40 * ScreenMultiply && currentMouseState.Position.Y < 96 * ScreenMultiply)
                 {
@@ -208,10 +201,11 @@ namespace MatheMage
                     ChangeReady = false;
                     Wait = 0;
                 }
-                else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 114 * ScreenMultiply && currentMouseState.Position.Y < 148 * ScreenMultiply)
+                else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 35 * ScreenMultiply && currentMouseState.Position.Y > 133 * ScreenMultiply && currentMouseState.Position.Y < 148 * ScreenMultiply)
                 {
                     level = "menu";
-                } else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 98 * ScreenMultiply && currentMouseState.Position.X < 158 * ScreenMultiply && currentMouseState.Position.Y > 41 * ScreenMultiply && currentMouseState.Position.Y < 94 * ScreenMultiply)
+                }
+                else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 98 * ScreenMultiply && currentMouseState.Position.X < 158 * ScreenMultiply && currentMouseState.Position.Y > 41 * ScreenMultiply && currentMouseState.Position.Y < 94 * ScreenMultiply)
                 {
                     level = "hospital";
                 }
@@ -256,7 +250,7 @@ namespace MatheMage
                 if (Gold >= 100000 && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 93 * ScreenMultiply && currentMouseState.Position.X < 232 * ScreenMultiply && currentMouseState.Position.Y > 107 * ScreenMultiply && currentMouseState.Position.Y < 136 * ScreenMultiply)
                 {
                     level = "city";
-                    Gold -= 100000;
+                    Gold -= 1000000;
                 }
             }
             else if (level == "forge")
@@ -607,7 +601,7 @@ namespace MatheMage
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
 
                 spriteBatch.Draw(Forge, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 240 * ScreenMultiply));
-                spriteBatch.DrawString(PixelCry, HeroDamage.ToString(), HeroDmagePos, Color.White);
+                spriteBatch.DrawString(PixelCry, HeroDamage.ToString(), new Vector2(49*ScreenMultiply, 151*ScreenMultiply), Color.White);
 
                 spriteBatch.End();
             }
@@ -617,7 +611,7 @@ namespace MatheMage
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
 
                 spriteBatch.Draw(HospitalRoom, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 240 * ScreenMultiply));
-                spriteBatch.DrawString(PixelCry, BaseHealth.ToString(), HeroDmagePos, Color.Red);
+                spriteBatch.DrawString(PixelCry, BaseHealth.ToString(), new Vector2 (107*ScreenMultiply, 152*ScreenMultiply), Color.Red);
 
                 spriteBatch.End();
             }
