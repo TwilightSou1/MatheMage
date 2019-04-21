@@ -60,6 +60,15 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>MatheMageKeys.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game.cs" />
     <Compile Include="Program.cs" />
@@ -102,6 +111,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Content\PixelFont.ttf" />
+    <None Include="MatheMageKeys.pfx" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

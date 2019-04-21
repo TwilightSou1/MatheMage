@@ -20,6 +20,13 @@ namespace MatheMage
         Texture2D HospitalRoom;
         Texture2D DungeonBackground;
         Texture2D WhileBackground;
+        Texture2D CityTutorial;
+        Texture2D CityTutorial2;
+        Texture2D DungeonTutorial;
+        Texture2D DungeonTutorial2;
+        Texture2D DungeonTutorial3;
+        Texture2D DungeonTutorial4;
+        Texture2D[] DungeonTutorialArr;
         Texture2D Hero1;
         Texture2D Hero2;
         Texture2D Sobaka;
@@ -46,7 +53,7 @@ namespace MatheMage
         int[] BlowParticlePositionY = new int[50];
 
         string[] SaveFileI = SaveManager.Loader();
-        string[] SaveFileO = new string[4];
+        string[] SaveFileO = new string[6];
         string[] MathTasks = new string[6];
 
         int EnemyType = 1;
@@ -59,6 +66,9 @@ namespace MatheMage
         int KilledEnemies = 0;
         int HowMuchToKill = 2;
 
+        int CityTutorialPart = 1;
+        int DungeonTutorialPart = 0;
+
         int DogHealth = 10;
         int GhostHealth = 5;
 
@@ -68,6 +78,7 @@ namespace MatheMage
         int BackGroundX1 = 0 * ScreenMultiply;
         int BackGroundX2 = 320 * ScreenMultiply;
 
+        int TutorialWait;
         int WaitAfterKill = 120;
         int Wait = 0;
         int FrameCount = 1;
@@ -88,6 +99,10 @@ namespace MatheMage
         bool isLevelInit = false;
         bool isAnswerCorrect = true;
 
+        bool cityTutorialActive = true;
+        bool dungeonTutorialActive = true;
+        bool isDungeonReadyAfterTutorial = false;
+
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -102,6 +117,8 @@ namespace MatheMage
                 BaseHealth = int.Parse(SaveFileI[1]);
                 HeroDamage = int.Parse(SaveFileI[2]);
                 Gold = int.Parse(SaveFileI[3]);
+                cityTutorialActive = bool.Parse(SaveFileI[4]);
+                dungeonTutorialActive = bool.Parse(SaveFileI[5]);
             }
 
             this.graphics.PreferredBackBufferHeight = 240 * ScreenMultiply;
@@ -142,6 +159,15 @@ namespace MatheMage
             Forge = this.Content.Load<Texture2D>("Forge");
             ChooseMenu = this.Content.Load<Texture2D>("ChooseMenu");
 
+            CityTutorial = this.Content.Load<Texture2D>("CityTutorial");
+            CityTutorial2 = this.Content.Load<Texture2D>("CityTutorial2");
+            DungeonTutorial = this.Content.Load<Texture2D>("DungeonTutorial");
+            DungeonTutorial2 = this.Content.Load<Texture2D>("DungeonTutorial2");
+            DungeonTutorial3 = this.Content.Load<Texture2D>("DungeonTutorial3");
+            DungeonTutorial4 = this.Content.Load<Texture2D>("DungeonTutorial4");
+
+            DungeonTutorialArr = new Texture2D[4] { DungeonTutorial, DungeonTutorial2, DungeonTutorial3, DungeonTutorial4 };
+
             Hero1 = this.Content.Load<Texture2D>("Hero1");
             Ghost = this.Content.Load<Texture2D>("Ghost");
             Hero2 = this.Content.Load<Texture2D>("Hero2");
@@ -177,15 +203,38 @@ namespace MatheMage
                 }
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
                 {
-                    SaveManager.Saver(new string[4] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString() });
+                    SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString() });
                     Exit();
                 }
             }
+
             else if (level == "city")
             {
+
+                if (cityTutorialActive)
+                {
+                    if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 248 * ScreenMultiply && currentMouseState.Position.X < 318 * ScreenMultiply && currentMouseState.Position.Y > 211 * ScreenMultiply && currentMouseState.Position.Y < 238 * ScreenMultiply)
+                    {
+                        if (CityTutorialPart == 1)
+                        {
+                            CityTutorialPart++;
+                        }
+                        else if(TutorialWait > 60)
+                        {
+                            cityTutorialActive = false;
+                            SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString() });
+                            TutorialWait = 0;
+                        }
+                    }
+                    if(CityTutorialPart == 2)
+                    {
+                        TutorialWait++;
+                    }
+                }
+                else
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 265 * ScreenMultiply && currentMouseState.Position.X < 320 * ScreenMultiply && currentMouseState.Position.Y > 80 * ScreenMultiply && currentMouseState.Position.Y < 115 * ScreenMultiply)
                 {
-                    level = "dungeon";
+                    level = "dungeonTutorialLevel";
                 }
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 185 * ScreenMultiply && currentMouseState.Position.X < 252 * ScreenMultiply && currentMouseState.Position.Y > 40 * ScreenMultiply && currentMouseState.Position.Y < 96 * ScreenMultiply)
                 {
@@ -299,6 +348,30 @@ namespace MatheMage
                 }
             }
             else
+            if (level == "dungeonTutorialLevel")
+            {
+                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 248 * ScreenMultiply && currentMouseState.Position.X < 318 * ScreenMultiply && currentMouseState.Position.Y > 211 * ScreenMultiply && currentMouseState.Position.Y < 238 * ScreenMultiply)
+                {
+                    if (DungeonTutorialPart !=3 && TutorialWait > 60)
+                    {
+                        DungeonTutorialPart++;
+                        TutorialWait = 0;
+                    }
+                    else if (TutorialWait > 60 && DungeonTutorialPart == 3)
+                    {
+                        dungeonTutorialActive = false;
+                        SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString() });
+                        isDungeonReadyAfterTutorial = true;
+                        TutorialWait = 0;
+                    }
+                }
+                if(isDungeonReadyAfterTutorial && TutorialWait > 40)
+                {
+                    TutorialWait = 0;
+                    level = "dungeon";
+                }
+                TutorialWait++;
+            }
             if (level == "dungeon")
             {
                 //Движение заднего фона
@@ -394,6 +467,8 @@ namespace MatheMage
                                 SaveFileO[1] = BaseHealth.ToString();
                                 SaveFileO[2] = HeroDamage.ToString();
                                 SaveFileO[3] = Gold.ToString();
+                                SaveFileO[4] = cityTutorialActive.ToString();
+                                SaveFileO[5] = dungeonTutorialActive.ToString();
 
                                 isLevelInit = false;
                                 isLevelStart = false;
@@ -430,6 +505,8 @@ namespace MatheMage
                                 SaveFileO[1] = BaseHealth.ToString();
                                 SaveFileO[2] = HeroDamage.ToString();
                                 SaveFileO[3] = Gold.ToString();
+                                SaveFileO[4] = cityTutorialActive.ToString();
+                                SaveFileO[5] = dungeonTutorialActive.ToString();
 
                                 isLevelInit = false;
                                 isLevelStart = false;
@@ -466,6 +543,8 @@ namespace MatheMage
                                 SaveFileO[1] = BaseHealth.ToString();
                                 SaveFileO[2] = HeroDamage.ToString();
                                 SaveFileO[3] = Gold.ToString();
+                                SaveFileO[4] = cityTutorialActive.ToString();
+                                SaveFileO[5] = dungeonTutorialActive.ToString();
 
                                 isLevelInit = false;
                                 isLevelStart = false;
@@ -502,6 +581,8 @@ namespace MatheMage
                                 SaveFileO[1] = BaseHealth.ToString();
                                 SaveFileO[2] = HeroDamage.ToString();
                                 SaveFileO[3] = Gold.ToString();
+                                SaveFileO[4] = cityTutorialActive.ToString();
+                                SaveFileO[5] = dungeonTutorialActive.ToString();
 
                                 isLevelInit = false;
                                 isLevelStart = false;
@@ -526,11 +607,13 @@ namespace MatheMage
                         {
                             level = "city";
                             Gold = 0;
-                            HeroDamage = 0;
+                            HeroDamage = 1;
 
                             SaveFileO[1] = BaseHealth.ToString();
                             SaveFileO[2] = HeroDamage.ToString();
                             SaveFileO[3] = Gold.ToString();
+                            SaveFileO[4] = cityTutorialActive.ToString();
+                            SaveFileO[5] = dungeonTutorialActive.ToString();
 
                             isLevelInit = false;
                             isLevelStart = false;
@@ -568,13 +651,31 @@ namespace MatheMage
 
                 spriteBatch.End();
             }
+            if (level == "dungeonTutorialLevel")
+            {
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
+
+                spriteBatch.Draw(DungeonTutorialArr[DungeonTutorialPart], destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 240 * ScreenMultiply));
+
+                spriteBatch.End();
+            }
             if (level == "city")
             {
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
 
-                spriteBatch.Draw(City, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
-                spriteBatch.DrawString(PixelCry, "Золото: " + Gold.ToString(), new Vector2(220*ScreenMultiply, 0), Color.Yellow);
-
+                if (cityTutorialActive && CityTutorialPart == 1)
+                {
+                    spriteBatch.Draw(CityTutorial, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 240 * ScreenMultiply));
+                }
+                else if(cityTutorialActive && CityTutorialPart == 2)
+                {
+                    spriteBatch.Draw(CityTutorial2, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 240 * ScreenMultiply));
+                }
+                else
+                {
+                    spriteBatch.Draw(City, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
+                    spriteBatch.DrawString(PixelCry, "Золото: " + Gold.ToString(), new Vector2(220 * ScreenMultiply, 0), Color.Yellow);
+                }
                 spriteBatch.End();
             }
             else

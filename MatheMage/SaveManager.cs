@@ -28,7 +28,7 @@ namespace MatheMage
                 outp = File.ReadAllLines("Save.txt", Encoding.ASCII);
             }
             else
-                outp = new string[4] { "nothing", "0", "0", "0" };
+                outp = new string[6] { "nothing", "3", "1", "0", "true", "true"};
             //}
 
             return outp;
