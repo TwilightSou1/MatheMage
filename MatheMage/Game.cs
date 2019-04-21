@@ -13,6 +13,8 @@ namespace MatheMage
         SpriteBatch spriteBatch;
 
         Song MainTheme;
+        Song CityTheme;
+        Song DungeonTheme;
 
         Texture2D MainMenu;
         Texture2D ShopBackground;
@@ -144,6 +146,8 @@ namespace MatheMage
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             MainTheme = this.Content.Load<Song>("lich-technical_941_use_only_when_nesessary");
+            DungeonTheme = this.Content.Load<Song>("dungeontheme");
+            CityTheme = this.Content.Load<Song>("citytheme");
 
             BlowParticle = this.Content.Load<Texture2D>("BlowParticle");
 
@@ -200,6 +204,7 @@ namespace MatheMage
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 104 * ScreenMultiply && currentMouseState.Position.X < 221 * ScreenMultiply && currentMouseState.Position.Y > 88 * ScreenMultiply && currentMouseState.Position.Y < 130 * ScreenMultiply)
                 {
                     level = "city";
+                    MediaPlayer.Play(CityTheme);
                 }
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
                 {
@@ -235,6 +240,7 @@ namespace MatheMage
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 265 * ScreenMultiply && currentMouseState.Position.X < 320 * ScreenMultiply && currentMouseState.Position.Y > 80 * ScreenMultiply && currentMouseState.Position.Y < 115 * ScreenMultiply)
                 {
                     level = "dungeonTutorialLevel";
+                    MediaPlayer.Play(DungeonTheme);
                 }
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 185 * ScreenMultiply && currentMouseState.Position.X < 252 * ScreenMultiply && currentMouseState.Position.Y > 40 * ScreenMultiply && currentMouseState.Position.Y < 96 * ScreenMultiply)
                 {
@@ -253,6 +259,7 @@ namespace MatheMage
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 35 * ScreenMultiply && currentMouseState.Position.Y > 133 * ScreenMultiply && currentMouseState.Position.Y < 148 * ScreenMultiply)
                 {
                     level = "menu";
+                    MediaPlayer.Play(MainTheme);
                 }
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 98 * ScreenMultiply && currentMouseState.Position.X < 158 * ScreenMultiply && currentMouseState.Position.Y > 41 * ScreenMultiply && currentMouseState.Position.Y < 94 * ScreenMultiply)
                 {
@@ -270,6 +277,7 @@ namespace MatheMage
                 if (ChangeReady == true && Wait == 15)
                 {
                     level = "city";
+                    MediaPlayer.Play(CityTheme);
                     ChangeReady = false;
                     Wait = 0;
                 }
@@ -295,10 +303,12 @@ namespace MatheMage
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 48 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
                 {
                     level = "city";
+                    MediaPlayer.Play(CityTheme);
                 }
                 if (Gold >= 100000 && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 93 * ScreenMultiply && currentMouseState.Position.X < 232 * ScreenMultiply && currentMouseState.Position.Y > 107 * ScreenMultiply && currentMouseState.Position.Y < 136 * ScreenMultiply)
                 {
                     level = "city";
+                    MediaPlayer.Play(CityTheme);
                     Gold -= 1000000;
                 }
             }
@@ -312,6 +322,7 @@ namespace MatheMage
                 if (ChangeReady == true && Wait == 15)
                 {
                     level = "city";
+                    MediaPlayer.Play(CityTheme);
                     ChangeReady = false;
                     Wait = 0;
                 }
@@ -345,32 +356,38 @@ namespace MatheMage
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
                 {
                     level = "city";
+                    MediaPlayer.Play(CityTheme);
                 }
             }
             else
             if (level == "dungeonTutorialLevel")
             {
-                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 248 * ScreenMultiply && currentMouseState.Position.X < 318 * ScreenMultiply && currentMouseState.Position.Y > 211 * ScreenMultiply && currentMouseState.Position.Y < 238 * ScreenMultiply)
+                if (dungeonTutorialActive)
                 {
-                    if (DungeonTutorialPart !=3 && TutorialWait > 60)
+                    if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 248 * ScreenMultiply && currentMouseState.Position.X < 318 * ScreenMultiply && currentMouseState.Position.Y > 211 * ScreenMultiply && currentMouseState.Position.Y < 238 * ScreenMultiply)
                     {
-                        DungeonTutorialPart++;
-                        TutorialWait = 0;
+                        if (DungeonTutorialPart != 3 && TutorialWait > 60)
+                        {
+                            DungeonTutorialPart++;
+                            TutorialWait = 0;
+                        }
+                        else if (TutorialWait > 60 && DungeonTutorialPart == 3)
+                        {
+                            dungeonTutorialActive = false;
+                            SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString() });
+                            isDungeonReadyAfterTutorial = true;
+                            TutorialWait = 0;
+                        }
                     }
-                    else if (TutorialWait > 60 && DungeonTutorialPart == 3)
+                    if (isDungeonReadyAfterTutorial && TutorialWait > 40)
                     {
-                        dungeonTutorialActive = false;
-                        SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString() });
-                        isDungeonReadyAfterTutorial = true;
                         TutorialWait = 0;
+                        level = "dungeon";
                     }
+                    TutorialWait++;
                 }
-                if(isDungeonReadyAfterTutorial && TutorialWait > 40)
-                {
-                    TutorialWait = 0;
+                else
                     level = "dungeon";
-                }
-                TutorialWait++;
             }
             if (level == "dungeon")
             {
@@ -476,6 +493,7 @@ namespace MatheMage
 
                                 KilledEnemies = 0;
                                 level = "city";
+                                MediaPlayer.Play(CityTheme);
                                 SaveManager.Saver(SaveFileO);
                             }
                             isEnemyAlive = false;
@@ -514,6 +532,7 @@ namespace MatheMage
 
                                 KilledEnemies = 0;
                                 level = "city";
+                                MediaPlayer.Play(CityTheme);
                                 SaveManager.Saver(SaveFileO);
                             }
                             isEnemyAlive = false;
@@ -552,6 +571,7 @@ namespace MatheMage
 
                                 KilledEnemies = 0;
                                 level = "city";
+                                MediaPlayer.Play(CityTheme);
                                 SaveManager.Saver(SaveFileO);
                             }
                             isEnemyAlive = false;
@@ -590,6 +610,7 @@ namespace MatheMage
 
                                 KilledEnemies = 0;
                                 level = "city";
+                                MediaPlayer.Play(CityTheme);
                                 SaveManager.Saver(SaveFileO);
                             }
                             isEnemyAlive = false;
@@ -606,6 +627,7 @@ namespace MatheMage
                         if (Health <= 0)
                         {
                             level = "city";
+                            MediaPlayer.Play(CityTheme);
                             Gold = 0;
                             HeroDamage = 1;
 
