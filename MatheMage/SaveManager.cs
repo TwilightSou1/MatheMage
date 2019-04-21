@@ -34,5 +34,12 @@ namespace MatheMage
             return outp;
         }
 
+        public static bool DevMode()
+        {
+            if (File.Exists("DevMode.txt"))
+                return true;
+            else
+                return false;
+        }
     }
 }

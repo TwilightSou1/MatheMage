@@ -74,8 +74,8 @@ namespace MatheMage
         int DogHealth = 10;
         int GhostHealth = 5;
 
-        double DifficultyMultiply = 0;
-        double GoldMultiply = 0;
+        double DifficultyMultiply = 1;
+        double GoldMultiply = 1;
 
         int BackGroundX1 = 0 * ScreenMultiply;
         int BackGroundX2 = 320 * ScreenMultiply;
@@ -96,6 +96,7 @@ namespace MatheMage
         bool ChangeReady = false;
         bool UpgradeChangeReady = false;
 
+        bool isDevModeOn = SaveManager.DevMode();
         bool isEnemyAlive = false;
         bool isLevelStart = false;
         bool isLevelInit = false;
@@ -277,7 +278,6 @@ namespace MatheMage
                 if (ChangeReady == true && Wait == 15)
                 {
                     level = "city";
-                    MediaPlayer.Play(CityTheme);
                     ChangeReady = false;
                     Wait = 0;
                 }
@@ -303,12 +303,10 @@ namespace MatheMage
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 48 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
                 {
                     level = "city";
-                    MediaPlayer.Play(CityTheme);
                 }
                 if (Gold >= 100000 && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 93 * ScreenMultiply && currentMouseState.Position.X < 232 * ScreenMultiply && currentMouseState.Position.Y > 107 * ScreenMultiply && currentMouseState.Position.Y < 136 * ScreenMultiply)
                 {
                     level = "city";
-                    MediaPlayer.Play(CityTheme);
                     Gold -= 1000000;
                 }
             }
@@ -322,7 +320,6 @@ namespace MatheMage
                 if (ChangeReady == true && Wait == 15)
                 {
                     level = "city";
-                    MediaPlayer.Play(CityTheme);
                     ChangeReady = false;
                     Wait = 0;
                 }
@@ -356,7 +353,7 @@ namespace MatheMage
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
                 {
                     level = "city";
-                    MediaPlayer.Play(CityTheme);
+
                 }
             }
             else
@@ -801,6 +798,26 @@ namespace MatheMage
                     spriteBatch.DrawString(PixelCry, MathTasks[2], taskPos2, Color.White); //НЛ 2
                     spriteBatch.DrawString(PixelCry, MathTasks[3], taskPos3, Color.White); //ВП 3
                     spriteBatch.DrawString(PixelCry, MathTasks[4], taskPos4, Color.White); //НП 4
+
+                    if (isDevModeOn)
+                    {
+                        if(MathTasks[5] == "1")
+                        {
+                            spriteBatch.Draw(BlowParticle, taskPos1, Color.White);
+                        }
+                        if (MathTasks[5] == "2")
+                        {
+                            spriteBatch.Draw(BlowParticle, taskPos2, Color.White);
+                        }
+                        if (MathTasks[5] == "3")
+                        {
+                            spriteBatch.Draw(BlowParticle, taskPos3, Color.White);
+                        }
+                        if (MathTasks[5] == "4")
+                        {
+                            spriteBatch.Draw(BlowParticle, taskPos4, Color.White);
+                        }
+                    }
                 }
                 //Отрисовка хп
                 spriteBatch.DrawString(PixelCry, EnemyHealth.ToString(), EnemyHealthPos, Color.Red);
