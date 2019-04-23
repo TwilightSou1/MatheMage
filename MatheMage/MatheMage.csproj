@@ -25,7 +25,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -59,25 +59,28 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>MatheMageKeys.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Keys.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>9F8679C8B6ADDD28A66D3A9A3CEC9082DFAA468F</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>C71FC035CF4CEC83F2385D46653139A2F17E37EA</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>MatheMage_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Keys.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game.cs" />
@@ -121,8 +124,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Content\PixelFont.ttf" />
-    <None Include="MatheMageKeys.pfx" />
-    <None Include="MatheMage_TemporaryKey.pfx" />
+    <None Include="Keys.pfx" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
