@@ -21,6 +21,7 @@ namespace MatheMage
         Texture2D ShopBackground;
         Texture2D BlowParticle;
         Texture2D HospitalRoom;
+        Texture2D Gameby;
         Texture2D DungeonBackground;
         Texture2D WhileBackground;
         Texture2D CityTutorial;
@@ -168,6 +169,7 @@ namespace MatheMage
             PixelCry = this.Content.Load<SpriteFont>("PixelCry");
 
             MainMenu = this.Content.Load<Texture2D>("MainMenu");
+            Gameby = this.Content.Load<Texture2D>("gameby");
             ShopBackground = this.Content.Load<Texture2D>("Shop");
             HospitalRoom = this.Content.Load<Texture2D>("HospitalRoom");
             DungeonBackground = this.Content.Load<Texture2D>("BackGround");
@@ -231,8 +233,12 @@ namespace MatheMage
                 }
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
                 {
-                    SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString(), isEndingAvailable.ToString()});
+                    SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString(), isEndingAvailable.ToString() });
                     Exit();
+                }
+                else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 285 * ScreenMultiply && currentMouseState.Position.X < 318 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
+                {
+                    level = "gameby";
                 }
             }
 
@@ -247,14 +253,14 @@ namespace MatheMage
                         {
                             CityTutorialPart++;
                         }
-                        else if(TutorialWait > 60)
+                        else if (TutorialWait > 60)
                         {
                             cityTutorialActive = false;
                             SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString(), isEndingAvailable.ToString() });
                             TutorialWait = 0;
                         }
                     }
-                    if(CityTutorialPart == 2)
+                    if (CityTutorialPart == 2)
                     {
                         TutorialWait++;
                     }
@@ -291,11 +297,11 @@ namespace MatheMage
                 else if (ChangeReady == true) Wait++;
                 if (isEndingAvailable)
                 {
-                    if(FrameCount < 7)
+                    if (FrameCount < 7)
                     {
                         PortalFrame = 0;
                     }
-                    else if(FrameCount < 15)
+                    else if (FrameCount < 15)
                     {
                         PortalFrame = 1;
                     }
@@ -323,9 +329,13 @@ namespace MatheMage
                     {
                         PortalFrame = 7;
                     }
+                    if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 70 * ScreenMultiply && currentMouseState.Position.X < 134 * ScreenMultiply && currentMouseState.Position.Y > 90 * ScreenMultiply && currentMouseState.Position.Y < 154 * ScreenMultiply)
+                    {
+                        level = "ending";
+                    }
                 }
             }
-            else if(level == "hospital")
+            else if (level == "hospital")
             {
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 18 * ScreenMultiply && currentMouseState.Position.X < 86 * ScreenMultiply && currentMouseState.Position.Y > 8 * ScreenMultiply && currentMouseState.Position.Y < 40 * ScreenMultiply)
                 {
@@ -414,9 +424,17 @@ namespace MatheMage
                 }
             }
             else
-            if(level == "ending")
+            if (level == "ending")
             {
 
+            }
+            else
+            if (level == "gameby")
+            {
+                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 244 * ScreenMultiply && currentMouseState.Position.X < 318 * ScreenMultiply && currentMouseState.Position.Y > 57 * ScreenMultiply && currentMouseState.Position.Y < 90 * ScreenMultiply)
+                {
+                    level = "menu";
+                }
             }
             else
             if (level == "dungeonTutorialLevel")
@@ -433,7 +451,7 @@ namespace MatheMage
                         else if (TutorialWait > 60 && DungeonTutorialPart == 3)
                         {
                             dungeonTutorialActive = false;
-                            SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString(), isEndingAvailable.ToString()});
+                            SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString(), isEndingAvailable.ToString() });
                             isDungeonReadyAfterTutorial = true;
                             TutorialWait = 0;
                         }
@@ -737,6 +755,16 @@ namespace MatheMage
 
                 spriteBatch.End();
             }
+            else
+            if(level == "gameby")
+            {
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
+
+                spriteBatch.Draw(Gameby, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 240 * ScreenMultiply));
+
+                spriteBatch.End();
+            }
+            else
             if (level == "dungeonTutorialLevel")
             {
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
