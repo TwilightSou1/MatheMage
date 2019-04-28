@@ -8,6 +8,7 @@ namespace MatheMage
     public class Game : Microsoft.Xna.Framework.Game
     {
         const int ScreenMultiply = 3;
+        const int EndingCost = 10000;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -28,7 +29,16 @@ namespace MatheMage
         Texture2D DungeonTutorial2;
         Texture2D DungeonTutorial3;
         Texture2D DungeonTutorial4;
+        Texture2D Portal1;
+        Texture2D Portal2;
+        Texture2D Portal3;
+        Texture2D Portal4;
+        Texture2D Portal5;
+        Texture2D Portal6;
+        Texture2D Portal7;
+        Texture2D Portal8;
         Texture2D[] DungeonTutorialArr;
+        Texture2D[] PortalArr;
         Texture2D Hero1;
         Texture2D Hero2;
         Texture2D Sobaka;
@@ -84,6 +94,7 @@ namespace MatheMage
         int WaitAfterKill = 120;
         int Wait = 0;
         int FrameCount = 1;
+        int PortalFrame = 0;
 
         int TimerXPos = 0;
         int FireBallXPos = 20 * ScreenMultiply;
@@ -101,6 +112,7 @@ namespace MatheMage
         bool isLevelStart = false;
         bool isLevelInit = false;
         bool isAnswerCorrect = true;
+        bool isEndingAvailable = false;
 
         bool cityTutorialActive = true;
         bool dungeonTutorialActive = true;
@@ -122,6 +134,7 @@ namespace MatheMage
                 Gold = int.Parse(SaveFileI[3]);
                 cityTutorialActive = bool.Parse(SaveFileI[4]);
                 dungeonTutorialActive = bool.Parse(SaveFileI[5]);
+                isEndingAvailable = bool.Parse(SaveFileI[6]);
             }
 
             this.graphics.PreferredBackBufferHeight = 240 * ScreenMultiply;
@@ -170,8 +183,17 @@ namespace MatheMage
             DungeonTutorial2 = this.Content.Load<Texture2D>("DungeonTutorial2");
             DungeonTutorial3 = this.Content.Load<Texture2D>("DungeonTutorial3");
             DungeonTutorial4 = this.Content.Load<Texture2D>("DungeonTutorial4");
+            Portal1 = this.Content.Load<Texture2D>("portal1");
+            Portal2 = this.Content.Load<Texture2D>("portal2");
+            Portal3 = this.Content.Load<Texture2D>("portal3");
+            Portal4 = this.Content.Load<Texture2D>("portal4");
+            Portal5 = this.Content.Load<Texture2D>("portal5");
+            Portal6 = this.Content.Load<Texture2D>("portal6");
+            Portal7 = this.Content.Load<Texture2D>("portal7");
+            Portal8 = this.Content.Load<Texture2D>("portal8");
 
             DungeonTutorialArr = new Texture2D[4] { DungeonTutorial, DungeonTutorial2, DungeonTutorial3, DungeonTutorial4 };
+            PortalArr = new Texture2D[8] { Portal1, Portal2, Portal3, Portal4, Portal5, Portal6, Portal7, Portal8 };
 
             Hero1 = this.Content.Load<Texture2D>("Hero1");
             Ghost = this.Content.Load<Texture2D>("Ghost");
@@ -209,7 +231,7 @@ namespace MatheMage
                 }
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
                 {
-                    SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString() });
+                    SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString(), isEndingAvailable.ToString()});
                     Exit();
                 }
             }
@@ -228,7 +250,7 @@ namespace MatheMage
                         else if(TutorialWait > 60)
                         {
                             cityTutorialActive = false;
-                            SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString() });
+                            SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString(), isEndingAvailable.ToString() });
                             TutorialWait = 0;
                         }
                     }
@@ -267,6 +289,41 @@ namespace MatheMage
                     level = "hospital";
                 }
                 else if (ChangeReady == true) Wait++;
+                if (isEndingAvailable)
+                {
+                    if(FrameCount < 7)
+                    {
+                        PortalFrame = 0;
+                    }
+                    else if(FrameCount < 15)
+                    {
+                        PortalFrame = 1;
+                    }
+                    else if (FrameCount < 22)
+                    {
+                        PortalFrame = 2;
+                    }
+                    else if (FrameCount < 30)
+                    {
+                        PortalFrame = 3;
+                    }
+                    else if (FrameCount < 37)
+                    {
+                        PortalFrame = 4;
+                    }
+                    else if (FrameCount < 45)
+                    {
+                        PortalFrame = 5;
+                    }
+                    else if (FrameCount < 52)
+                    {
+                        PortalFrame = 6;
+                    }
+                    else if (FrameCount < 60)
+                    {
+                        PortalFrame = 7;
+                    }
+                }
             }
             else if(level == "hospital")
             {
@@ -306,8 +363,8 @@ namespace MatheMage
                 }
                 if (Gold >= 100000 && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 93 * ScreenMultiply && currentMouseState.Position.X < 232 * ScreenMultiply && currentMouseState.Position.Y > 107 * ScreenMultiply && currentMouseState.Position.Y < 136 * ScreenMultiply)
                 {
-                    level = "city";
                     Gold -= 1000000;
+                    isEndingAvailable = true;
                 }
             }
             else if (level == "forge")
@@ -357,6 +414,11 @@ namespace MatheMage
                 }
             }
             else
+            if(level == "ending")
+            {
+
+            }
+            else
             if (level == "dungeonTutorialLevel")
             {
                 if (dungeonTutorialActive)
@@ -371,7 +433,7 @@ namespace MatheMage
                         else if (TutorialWait > 60 && DungeonTutorialPart == 3)
                         {
                             dungeonTutorialActive = false;
-                            SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString() });
+                            SaveManager.Saver(new string[] { "test", BaseHealth.ToString(), HeroDamage.ToString(), Gold.ToString(), cityTutorialActive.ToString(), dungeonTutorialActive.ToString(), isEndingAvailable.ToString()});
                             isDungeonReadyAfterTutorial = true;
                             TutorialWait = 0;
                         }
@@ -483,6 +545,7 @@ namespace MatheMage
                                 SaveFileO[3] = Gold.ToString();
                                 SaveFileO[4] = cityTutorialActive.ToString();
                                 SaveFileO[5] = dungeonTutorialActive.ToString();
+                                SaveFileO[6] = isEndingAvailable.ToString();
 
                                 isLevelInit = false;
                                 isLevelStart = false;
@@ -522,6 +585,7 @@ namespace MatheMage
                                 SaveFileO[3] = Gold.ToString();
                                 SaveFileO[4] = cityTutorialActive.ToString();
                                 SaveFileO[5] = dungeonTutorialActive.ToString();
+                                SaveFileO[6] = isEndingAvailable.ToString();
 
                                 isLevelInit = false;
                                 isLevelStart = false;
@@ -561,6 +625,7 @@ namespace MatheMage
                                 SaveFileO[3] = Gold.ToString();
                                 SaveFileO[4] = cityTutorialActive.ToString();
                                 SaveFileO[5] = dungeonTutorialActive.ToString();
+                                SaveFileO[6] = isEndingAvailable.ToString();
 
                                 isLevelInit = false;
                                 isLevelStart = false;
@@ -600,6 +665,7 @@ namespace MatheMage
                                 SaveFileO[3] = Gold.ToString();
                                 SaveFileO[4] = cityTutorialActive.ToString();
                                 SaveFileO[5] = dungeonTutorialActive.ToString();
+                                SaveFileO[6] = isEndingAvailable.ToString();
 
                                 isLevelInit = false;
                                 isLevelStart = false;
@@ -633,6 +699,7 @@ namespace MatheMage
                             SaveFileO[3] = Gold.ToString();
                             SaveFileO[4] = cityTutorialActive.ToString();
                             SaveFileO[5] = dungeonTutorialActive.ToString();
+                            SaveFileO[6] = isEndingAvailable.ToString();
 
                             isLevelInit = false;
                             isLevelStart = false;
@@ -681,7 +748,6 @@ namespace MatheMage
             if (level == "city")
             {
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
-
                 if (cityTutorialActive && CityTutorialPart == 1)
                 {
                     spriteBatch.Draw(CityTutorial, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 240 * ScreenMultiply));
@@ -695,6 +761,10 @@ namespace MatheMage
                     spriteBatch.Draw(City, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
                     spriteBatch.DrawString(PixelCry, "Золото: " + Gold.ToString(), new Vector2(220 * ScreenMultiply, 0), Color.Yellow);
                 }
+                if (isEndingAvailable)
+                {
+                    spriteBatch.Draw(PortalArr[PortalFrame], destinationRectangle: new Rectangle(70 * ScreenMultiply, 90 * ScreenMultiply, 64 * ScreenMultiply, 64 * ScreenMultiply));
+                }
                 spriteBatch.End();
             }
             else
@@ -703,6 +773,7 @@ namespace MatheMage
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
 
                 spriteBatch.Draw(ShopBackground, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
+                spriteBatch.DrawString(PixelCry, EndingCost.ToString(), new Vector2(120 * ScreenMultiply, 110 * ScreenMultiply), Color.Yellow);
 
                 spriteBatch.End();
             }
