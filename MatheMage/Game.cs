@@ -8,7 +8,7 @@ namespace MatheMage
     public class Game : Microsoft.Xna.Framework.Game
     {
         const int ScreenMultiply = 3;
-        const int EndingCost = 10000;
+        const int EndingCost = 200;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -22,6 +22,7 @@ namespace MatheMage
         Texture2D BlowParticle;
         Texture2D HospitalRoom;
         Texture2D Gameby;
+        Texture2D EndingBackGround;
         Texture2D DungeonBackground;
         Texture2D WhileBackground;
         Texture2D CityTutorial;
@@ -180,6 +181,7 @@ namespace MatheMage
             MainMenu = this.Content.Load<Texture2D>("MainMenu");
             Gameby = this.Content.Load<Texture2D>("gameby");
             ShopBackground = this.Content.Load<Texture2D>("Shop");
+            EndingBackGround = this.Content.Load<Texture2D>("ending");
             HospitalRoom = this.Content.Load<Texture2D>("HospitalRoom");
             DungeonBackground = this.Content.Load<Texture2D>("BackGround");
             WhileBackground = this.Content.Load<Texture2D>("WhileBackground");
@@ -435,11 +437,7 @@ namespace MatheMage
             {
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 140 * ScreenMultiply && currentMouseState.Position.X < 155 * ScreenMultiply && currentMouseState.Position.Y > 50 * ScreenMultiply && currentMouseState.Position.Y < 65 * ScreenMultiply)
                 {
-
-
                     level = "dungeon";
-
-
                 }
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
                 {
@@ -450,7 +448,10 @@ namespace MatheMage
             else
             if (level == "ending")
             {
-
+                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 225 * ScreenMultiply && currentMouseState.Position.X < 317 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
+                {
+                    Exit();
+                }
             }
             else
             if (level == "gameby")
@@ -576,7 +577,7 @@ namespace MatheMage
                         {
                             EnemyType = 255;
                             EnemyDamage = 10000;
-                            EnemyHealth = 200;
+                            EnemyHealth = 100;
                         }
 
                             isEnemyAlive = true;
