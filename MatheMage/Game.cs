@@ -493,37 +493,35 @@ namespace MatheMage
             }
             if (level == "dungeon")
             {
-                if (isEndNow)
+                if (FrameCount < 10)
                 {
-                    if(Wait < 10)
-                    {
-                        MonsterFrame = 0;
-                    }
-                    else
-                    if (Wait < 20)
-                    {
-                        MonsterFrame = 1;
-                    }
-                    else
-                    if (Wait < 30)
-                    {
-                        MonsterFrame = 2;
-                    }
-                    else
-                    if (Wait < 40)
-                    {
-                        MonsterFrame = 3;
-                    }
-                    else
-                    if (Wait < 50)
-                    {
-                        MonsterFrame = 4;
-                    }
-                    else
-                    if (Wait < 60)
-                    {
-                        MonsterFrame = 5;
-                    }
+                    MonsterFrame = 0;
+                }
+                else
+                if (FrameCount < 20)
+                {
+                    MonsterFrame = 1;
+                }
+                else
+                if (FrameCount < 30)
+                {
+                    MonsterFrame = 2;
+                }
+                else
+                if (FrameCount < 40)
+                {
+                    MonsterFrame = 3;
+                }
+                else
+                if (FrameCount < 50)
+                {
+                    MonsterFrame = 4;
+                }
+                else
+                if (FrameCount < 60)
+                {
+                    MonsterFrame = 5;
+
                 }
                 //Движение заднего фона
                 if (!LastEnemy && WaitAfterKill < 120)
@@ -793,6 +791,7 @@ namespace MatheMage
                             level = "city";
                             MediaPlayer.Play(CityTheme);
                             Gold = 0;
+                            BaseHealth = 3;
                             HeroDamage = 1;
                             isEndingAvailable = false;
                             isEndNow = false;
