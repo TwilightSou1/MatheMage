@@ -66,7 +66,7 @@ namespace MatheMage
         int[] BlowParticlePositionY = new int[50];
 
         string[] SaveFileI = SaveManager.Loader();
-        string[] SaveFileO = new string[6];
+        string[] SaveFileO = new string[7];
         string[] MathTasks = new string[6];
 
         int EnemyType = 1;
@@ -82,8 +82,8 @@ namespace MatheMage
         int CityTutorialPart = 1;
         int DungeonTutorialPart = 0;
 
-        int DogHealth = 10;
-        int GhostHealth = 5;
+        int DogHealth = 5;
+        int GhostHealth = 3;
 
         double DifficultyMultiply = 1;
         double GoldMultiply = 1;
@@ -269,6 +269,13 @@ namespace MatheMage
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 265 * ScreenMultiply && currentMouseState.Position.X < 320 * ScreenMultiply && currentMouseState.Position.Y > 80 * ScreenMultiply && currentMouseState.Position.Y < 115 * ScreenMultiply)
                 {
                     level = "dungeonTutorialLevel";
+
+                    DifficultyMultiply = HeroDamage * (BaseHealth / 30 + 1);
+                    GoldMultiply = HeroDamage * (BaseHealth / 10 + 1);
+
+                    DogHealth *= (int)DifficultyMultiply;
+                    GhostHealth *= (int)DifficultyMultiply;
+
                     MediaPlayer.Play(DungeonTheme);
                 }
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 185 * ScreenMultiply && currentMouseState.Position.X < 252 * ScreenMultiply && currentMouseState.Position.Y > 40 * ScreenMultiply && currentMouseState.Position.Y < 96 * ScreenMultiply)
@@ -371,10 +378,11 @@ namespace MatheMage
                 {
                     level = "city";
                 }
-                if (Gold >= 100000 && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 93 * ScreenMultiply && currentMouseState.Position.X < 232 * ScreenMultiply && currentMouseState.Position.Y > 107 * ScreenMultiply && currentMouseState.Position.Y < 136 * ScreenMultiply)
+                if (!isEndingAvailable && Gold >= EndingCost && currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 129 * ScreenMultiply && currentMouseState.Position.X < 199 * ScreenMultiply && currentMouseState.Position.Y > 20 * ScreenMultiply && currentMouseState.Position.Y < 90 * ScreenMultiply)
                 {
-                    Gold -= 1000000;
+                    Gold -= EndingCost;
                     isEndingAvailable = true;
+                    level = "city";
                 }
             }
             else if (level == "forge")
@@ -409,13 +417,11 @@ namespace MatheMage
             {
                 if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 140 * ScreenMultiply && currentMouseState.Position.X < 155 * ScreenMultiply && currentMouseState.Position.Y > 50 * ScreenMultiply && currentMouseState.Position.Y < 65 * ScreenMultiply)
                 {
-                    DifficultyMultiply = HeroDamage * BaseHealth / 30 + 1;
-                    GoldMultiply = HeroDamage * BaseHealth / 10 + 1;
+
 
                     level = "dungeon";
 
-                    DogHealth *= (int)DifficultyMultiply;
-                    GhostHealth *= (int)DifficultyMultiply;
+
                 }
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 1 * ScreenMultiply && currentMouseState.Position.X < 75 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
                 {
