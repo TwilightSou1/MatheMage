@@ -448,7 +448,7 @@ namespace MatheMage
             else
             if (level == "ending")
             {
-                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 225 * ScreenMultiply && currentMouseState.Position.X < 317 * ScreenMultiply && currentMouseState.Position.Y > 1 * ScreenMultiply && currentMouseState.Position.Y < 34 * ScreenMultiply)
+                if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 225 * ScreenMultiply && currentMouseState.Position.X < 317 * ScreenMultiply && currentMouseState.Position.Y > 206 * ScreenMultiply && currentMouseState.Position.Y < 238 * ScreenMultiply)
                 {
                     Exit();
                 }
@@ -916,6 +916,15 @@ namespace MatheMage
 
                 spriteBatch.Draw(HospitalRoom, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 240 * ScreenMultiply));
                 spriteBatch.DrawString(PixelCry, BaseHealth.ToString(), new Vector2 (107*ScreenMultiply, 152*ScreenMultiply), Color.Red);
+
+                spriteBatch.End();
+            }
+            else
+            if(level == "ending")
+            {
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
+
+                spriteBatch.Draw(EndingBackGround, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 240 * ScreenMultiply));
 
                 spriteBatch.End();
             }
