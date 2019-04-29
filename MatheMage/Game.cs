@@ -38,8 +38,15 @@ namespace MatheMage
         Texture2D Portal6;
         Texture2D Portal7;
         Texture2D Portal8;
+        Texture2D Monster1;
+        Texture2D Monster2;
+        Texture2D Monster3;
+        Texture2D Monster4;
+        Texture2D Monster5;
+        Texture2D Monster6;
         Texture2D[] DungeonTutorialArr;
         Texture2D[] PortalArr;
+        Texture2D[] MonsterArr;
         Texture2D Hero1;
         Texture2D Hero2;
         Texture2D Sobaka;
@@ -96,6 +103,7 @@ namespace MatheMage
         int Wait = 0;
         int FrameCount = 1;
         int PortalFrame = 0;
+        int MonsterFrame = 0;
 
         int TimerXPos = 0;
         int FireBallXPos = 20 * ScreenMultiply;
@@ -114,6 +122,7 @@ namespace MatheMage
         bool isLevelInit = false;
         bool isAnswerCorrect = true;
         bool isEndingAvailable = false;
+        bool isEndNow = false;
 
         bool cityTutorialActive = true;
         bool dungeonTutorialActive = true;
@@ -193,7 +202,14 @@ namespace MatheMage
             Portal6 = this.Content.Load<Texture2D>("portal6");
             Portal7 = this.Content.Load<Texture2D>("portal7");
             Portal8 = this.Content.Load<Texture2D>("portal8");
+            Monster1 = this.Content.Load<Texture2D>("Monster1");
+            Monster2 = this.Content.Load<Texture2D>("Monster2");
+            Monster3 = this.Content.Load<Texture2D>("Monster3");
+            Monster4 = this.Content.Load<Texture2D>("Monster4");
+            Monster5 = this.Content.Load<Texture2D>("Monster5");
+            Monster6 = this.Content.Load<Texture2D>("Monster6");
 
+            MonsterArr = new Texture2D[6] { Monster1, Monster2, Monster3, Monster4, Monster5, Monster6 };
             DungeonTutorialArr = new Texture2D[4] { DungeonTutorial, DungeonTutorial2, DungeonTutorial3, DungeonTutorial4 };
             PortalArr = new Texture2D[8] { Portal1, Portal2, Portal3, Portal4, Portal5, Portal6, Portal7, Portal8 };
 
@@ -338,7 +354,9 @@ namespace MatheMage
                     }
                     if (currentMouseState.LeftButton == ButtonState.Pressed && currentMouseState.Position.X > 70 * ScreenMultiply && currentMouseState.Position.X < 134 * ScreenMultiply && currentMouseState.Position.Y > 90 * ScreenMultiply && currentMouseState.Position.Y < 154 * ScreenMultiply)
                     {
-                        level = "ending";
+                        MediaPlayer.Play(MainTheme);
+                        level = "dungeon";
+                        isEndNow = true;
                     }
                 }
             }
@@ -474,6 +492,38 @@ namespace MatheMage
             }
             if (level == "dungeon")
             {
+                if (isEndNow)
+                {
+                    if(Wait < 10)
+                    {
+                        MonsterFrame = 0;
+                    }
+                    else
+                    if (Wait < 20)
+                    {
+                        MonsterFrame = 1;
+                    }
+                    else
+                    if (Wait < 30)
+                    {
+                        MonsterFrame = 2;
+                    }
+                    else
+                    if (Wait < 40)
+                    {
+                        MonsterFrame = 3;
+                    }
+                    else
+                    if (Wait < 50)
+                    {
+                        MonsterFrame = 4;
+                    }
+                    else
+                    if (Wait < 60)
+                    {
+                        MonsterFrame = 5;
+                    }
+                }
                 //Движение заднего фона
                 if (!LastEnemy && WaitAfterKill < 120)
                 {
@@ -508,18 +558,28 @@ namespace MatheMage
                 {
                     if (WaitAfterKill <= 0 || !isLevelInit)
                     {
-                        EnemyType = Randomize.Rnd(1, 3);
-                        if (EnemyType == 1)
+                        if (!isEndNow)
                         {
-                            EnemyDamage = 1;
-                            EnemyHealth = DogHealth;
+                            EnemyType = Randomize.Rnd(1, 3);
+                            if (EnemyType == 1)
+                            {
+                                EnemyDamage = 1;
+                                EnemyHealth = DogHealth;
+                            }
+                            else if (EnemyType == 2)
+                            {
+                                EnemyDamage = 2;
+                                EnemyHealth = GhostHealth;
+                            }
                         }
-                        else if (EnemyType == 2)
+                        else
                         {
-                            EnemyDamage = 2;
-                            EnemyHealth = GhostHealth;
+                            EnemyType = 255;
+                            EnemyDamage = 10000;
+                            EnemyHealth = 200;
                         }
-                        isEnemyAlive = true;
+
+                            isEnemyAlive = true;
                         WaitAfterKill = 120;
 
                     }
@@ -561,6 +621,10 @@ namespace MatheMage
                             {
                                 Gold += 10 * (int)GoldMultiply;
                             }
+                            else if (EnemyType == 255)
+                            {
+                                level = "ending";
+                            }
                             KilledEnemies++;
                             if (KilledEnemies == HowMuchToKill)
                             {
@@ -600,6 +664,10 @@ namespace MatheMage
                             else if (EnemyType == 2)
                             {
                                 Gold += 10 * (int)GoldMultiply;
+                            }
+                            else if (EnemyType == 255)
+                            {
+                                level = "ending";
                             }
                             KilledEnemies++;
                             if (KilledEnemies == HowMuchToKill)
@@ -641,6 +709,10 @@ namespace MatheMage
                             {
                                 Gold += 10 * (int)GoldMultiply;
                             }
+                            else if (EnemyType == 255)
+                            {
+                                level = "ending";
+                            }
                             KilledEnemies++;
                             if (KilledEnemies == HowMuchToKill)
                             {
@@ -681,6 +753,10 @@ namespace MatheMage
                             {
                                 Gold += 10 * (int)GoldMultiply;
                             }
+                            else if (EnemyType == 255)
+                            {
+                                level = "ending";
+                            }
                             KilledEnemies++;
                             if (KilledEnemies == HowMuchToKill)
                             {
@@ -717,6 +793,8 @@ namespace MatheMage
                             MediaPlayer.Play(CityTheme);
                             Gold = 0;
                             HeroDamage = 1;
+                            isEndingAvailable = false;
+                            isEndNow = false;
 
                             SaveFileO[1] = BaseHealth.ToString();
                             SaveFileO[2] = HeroDamage.ToString();
@@ -807,7 +885,7 @@ namespace MatheMage
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
 
                 spriteBatch.Draw(ShopBackground, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
-                spriteBatch.DrawString(PixelCry, EndingCost.ToString(), new Vector2(120 * ScreenMultiply, 110 * ScreenMultiply), Color.Yellow);
+                spriteBatch.DrawString(PixelCry, EndingCost.ToString(), new Vector2(150 * ScreenMultiply, 110 * ScreenMultiply), Color.Yellow);
 
                 spriteBatch.End();
             }
@@ -845,16 +923,12 @@ namespace MatheMage
             {
 
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
-                if (LastEnemy == true)
-                {
-                    spriteBatch.Draw(DungeonBackground, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
-
-                }
-                else
+                if (!isEndNow)
                 {
                     spriteBatch.Draw(WhileBackground, destinationRectangle: new Rectangle(BackGroundX1, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
                     spriteBatch.Draw(WhileBackground, destinationRectangle: new Rectangle(BackGroundX2, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
-                }
+                }else
+                    spriteBatch.Draw(DungeonBackground, destinationRectangle: new Rectangle(0, 0, 320 * ScreenMultiply, 150 * ScreenMultiply));
                 spriteBatch.Draw(ChooseMenu, destinationRectangle: new Rectangle(0, 150 * ScreenMultiply, 320 * ScreenMultiply, 90 * ScreenMultiply));
                 //Анимация раз в 0,5 секунды
                 if (FrameCount <= 30)
@@ -871,6 +945,10 @@ namespace MatheMage
                 else if (EnemyType == 2 && isEnemyAlive)
                 {
                     spriteBatch.Draw(Ghost, destinationRectangle: new Rectangle(220 * ScreenMultiply, 70 * ScreenMultiply, 32 * (ScreenMultiply + 2), 32 * (ScreenMultiply + 2)));
+                }
+                else if (EnemyType == 255)
+                {
+                    spriteBatch.Draw(MonsterArr[MonsterFrame], destinationRectangle: new Rectangle(220 * ScreenMultiply, 70 * ScreenMultiply, 32 * (ScreenMultiply + 2), 32 * (ScreenMultiply + 2)));
                 }
 
                 if (!isAnswered && isLevelStart && isAnswerCorrect)
